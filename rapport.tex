@@ -13,7 +13,8 @@
 \usepackage{float}      % placement images
 \usepackage{caption}
 \usepackage{booktabs}   % tableaux
-
+\usepackage{physics}    % notation de Dirac \ket, \bra
+\usepackage{amsthm}     % environnement theorem
 \usepackage{currfile}
 
 \geometry{margin=2.5cm}
@@ -545,17 +546,695 @@ L’algorithme de Deutsch met ainsi en évidence un avantage fondamental du calc
 
 \section{Théorie}
 
-.....
-
 \subsection{Correction d'erreur classique}
 
-.......
+Avant d’introduire les mécanismes de correction d’erreurs quantiques, il est utile de rappeler le principe de correction d’erreurs utilisé en informatique classique. Dans un système classique, les données sont généralement protégées par des techniques de \textbf{redondance}, consistant à copier plusieurs fois une même information afin de pouvoir détecter ou corriger une éventuelle erreur de transmission.
+
+Un modèle simple permettant de représenter les erreurs de transmission est le \textbf{canal binaire symétrique} (\textit{Binary Symmetric Channel}, BSC). Dans ce modèle, un bit transmis peut être inversé avec une probabilité $p$, appelée probabilité d’erreur. Ainsi :
+
+\[
+0 \longrightarrow 1
+\qquad
+\text{ou}
+\qquad
+1 \longrightarrow 0
+\]
+
+avec une probabilité $p$, tandis que le bit reste inchangé avec une probabilité $1-p$.
+
+Une méthode classique élémentaire consiste à utiliser un \textbf{code de répétition à trois bits}. Le principe est d’encoder un bit logique en trois copies identiques :
+
+\[
+0 \longrightarrow 0_L = 000
+\]
+
+\[
+1 \longrightarrow 1_L = 111
+\]
+
+Lors de la réception, une règle de \textbf{vote majoritaire} est appliquée afin de retrouver la valeur initiale du bit.
+
+Prenons l’exemple du mot logique $0_L = 000$ :
+
+\begin{itemize}
+    \item \textbf{Aucune erreur} :
+    
+    le mot reçu reste $000$, avec une probabilité :
+    
+    \[
+    (1-p)^3
+    \]
+
+    \item \textbf{Une seule erreur} :
+    
+    les mots reçus possibles sont :
+    
+    \[
+    100,\quad010,\quad001
+    \]
+    
+    avec une probabilité totale :
+    
+    \[
+    3p(1-p)^2
+    \]
+
+    Dans ce cas, la majorité des bits reste $0$ ; l’erreur peut être corrigée.
+
+    \item \textbf{Deux erreurs ou plus} :
+    
+    les mots reçus deviennent :
+    
+    \[
+    110,\quad101,\quad011,\quad111
+    \]
+
+    avec une probabilité :
+
+    \[
+    3p^2(1-p)+p^3
+    \]
+
+    Le vote majoritaire conduit alors à une mauvaise correction.
+\end{itemize}
+
+Le taux d’erreur résiduel après correction est donc :
+
+\[
+P_{\text{erreur}}
+=
+3p^2(1-p)+p^3
+\]
+
+soit :
+
+\[
+P_{\text{erreur}}
+=
+3p^2-2p^3
+\]
+
+Pour des probabilités d’erreur faibles ($p<0.5$), ce code améliore significativement la fiabilité du système. Par exemple, pour un bruit initial de $10\%$ ($p=0.1$), le taux d’erreur résiduel devient :
+
+\[
+P_{\text{erreur}}
+=
+3(0.1)^2
+-
+2(0.1)^3
+=
+0.028
+\]
+
+soit seulement $2.8\%$ d’erreurs.
+
+Ainsi, la correction classique repose essentiellement sur une idée simple : \textbf{copier l’information plusieurs fois afin de pouvoir reconstruire la donnée initiale en cas d’erreur}. Cependant, cette stratégie ne peut pas être appliquée directement dans le cadre quantique.
+
+\subsection{Limites de la correction classique en calcul quantique}
+
+Contrairement aux bits classiques, les qubits peuvent exister dans une superposition d’états :
+
+\[
+\ket{\psi}
+=
+\alpha\ket{0}
++
+\beta\ket{1}
+\]
+
+avec :
+
+\[
+|\alpha|^2+|\beta|^2=1
+\]
+
+Une idée naturelle pourrait consister à reproduire la stratégie classique de redondance en copiant simplement le qubit plusieurs fois. On souhaiterait par exemple réaliser une transformation du type :
+
+\[
+\ket{\psi}
+\otimes
+\ket{0}
+\longrightarrow
+\ket{\psi}
+\otimes
+\ket{\psi}
+\]
+
+où le second qubit initialisé à $\ket{0}$ deviendrait une copie exacte du premier.
+
+Cependant, cette opération est fondamentalement impossible à cause du \textbf{théorème de non-clonage quantique}.
+
+\begin{theorem}[Théorème de non-clonage]
+Il n’existe aucun opérateur unitaire universel permettant de copier parfaitement un état quantique arbitraire et inconnu.
+\end{theorem}
+
+L’idée de la démonstration repose sur une contradiction mathématique. Supposons qu’il existe un opérateur unitaire $U$ capable de cloner deux états quantiques quelconques $\ket{\phi}$ et $\ket{\psi}$ :
+
+\[
+U(\ket{\phi}\ket{0})
+=
+\ket{\phi}\ket{\phi}
+\]
+
+\[
+U(\ket{\psi}\ket{0})
+=
+\ket{\psi}\ket{\psi}
+\]
+
+En utilisant la conservation du produit scalaire par les opérateurs unitaires, on obtient :
+
+\[
+\braket{\phi|\psi}
+=
+(\braket{\phi|\psi})^2
+\]
+
+Cette relation implique uniquement deux possibilités :
+
+\[
+\braket{\phi|\psi}=0
+\]
+
+ou
+
+\[
+\braket{\phi|\psi}=1
+\]
+
+Autrement dit, le clonage parfait n’est possible que pour des états orthogonaux ou identiques. Il est donc impossible de copier un état quantique arbitraire, en particulier une superposition inconnue.
+
+Cette contrainte rend inapplicables les méthodes classiques de redondance basées sur la copie directe des données.
+
+La correction d’erreurs quantiques doit alors adopter une stratégie différente : au lieu de copier l’information quantique, celle-ci est répartie de manière non locale entre plusieurs qubits grâce au phénomène d’intrication. Cette approche permet de détecter certaines erreurs sans mesurer directement le qubit logique et donc sans détruire l’information quantique.
 
 \subsection{Correction d'erreur quantique avec erreur X}
 
+Comme nous l’avons vu précédemment, les méthodes classiques de correction d’erreurs reposent sur la duplication de l’information. Cependant, le théorème de non-clonage interdit la copie parfaite d’un état quantique inconnu. Il devient donc nécessaire d’adopter une stratégie différente.
+
+L’idée fondamentale de la correction d’erreurs quantiques consiste à répartir l’information d’un qubit logique sur plusieurs qubits physiques, de manière à pouvoir détecter certaines erreurs sans mesurer directement l’état quantique initial.
+
+Dans cette section, nous nous intéressons au cas le plus simple : la correction d’une erreur de type \textbf{bit-flip}, modélisée par l’opérateur de Pauli $X$.
+
+\subsubsection{Principe général}
+
+Une erreur de type $X$ correspond à une inversion de l’état du qubit, analogue à une erreur binaire classique :
+
+\[
+X\ket{0}
+=
+\ket{1}
+\]
+
+\[
+X\ket{1}
+=
+\ket{0}
+\]
+
+Mathématiquement, la porte de Pauli $X$ est représentée par la matrice :
+
+\[
+X=
+\begin{pmatrix}
+0&1\\
+1&0
+\end{pmatrix}
+\]
+
+L’objectif est donc de protéger un qubit arbitraire :
+
+\[
+\ket{\psi}
+=
+\alpha\ket{0}
++
+\beta\ket{1}
+\]
+
+contre une inversion accidentelle de l’un des qubits physiques du système.
+
+Pour cela, on utilise un \textbf{code de répétition quantique à trois qubits}, inspiré du mécanisme de redondance classique.
+
+\subsubsection{Encodage du qubit logique}
+
+Le principe du code consiste à répartir l’information quantique sur trois qubits physiques.
+
+On associe les états logiques suivants :
+
+\[
+\ket{0_L}
+=
+\ket{000}
+\]
+
+\[
+\ket{1_L}
+=
+\ket{111}
+\]
+
+Ainsi, un qubit arbitraire :
+
+\[
+\ket{\psi}
+=
+\alpha\ket{0}
++
+\beta\ket{1}
+\]
+
+est encodé sous la forme :
+
+\[
+\ket{\psi_L}
+=
+\alpha\ket{000}
++
+\beta\ket{111}
+\]
+
+L’information quantique n’est donc plus portée par un seul qubit mais distribuée sur trois qubits physiques.
+
+L’encodage est réalisé à l’aide de deux portes \textbf{CNOT}. On commence avec le système :
+
+\[
+\ket{\psi}
+\otimes
+\ket{0}
+\otimes
+\ket{0}
+\]
+
+soit :
+
+\[
+\ket{\Psi_0}
+=
+\alpha\ket{000}
++
+\beta\ket{100}
+\]
+
+Une première porte CNOT est appliquée entre le premier et le deuxième qubit, puis une seconde entre le premier et le troisième.
+
+Après ces opérations, l’état devient :
+
+\[
+\ket{\psi_L}
+=
+\alpha\ket{000}
++
+\beta\ket{111}
+\]
+
+Il est important de remarquer que les amplitudes $\alpha$ et $\beta$ n’ont pas été copiées : elles décrivent désormais un état quantique global intriqué.
+
+\subsubsection{Modélisation d’une erreur de type X}
+
+Supposons maintenant qu’une erreur de type bit-flip affecte le premier qubit physique.
+
+L’opérateur d’erreur agit alors selon :
+
+\[
+X_1\ket{\psi_L}
+\]
+
+et l’état devient :
+
+\[
+\ket{\Psi_{\text{bruit}}}
+=
+X_1\ket{\psi_L}
+=
+\alpha\ket{100}
++
+\beta\ket{011}
+\]
+
+De manière analogue, une erreur sur les autres qubits produirait :
+
+\[
+X_2\ket{\psi_L}
+=
+\alpha\ket{010}
++
+\beta\ket{101}
+\]
+
+\[
+X_3\ket{\psi_L}
+=
+\alpha\ket{001}
++
+\beta\ket{110}
+\]
+
+Le défi consiste alors à identifier quel qubit a été affecté, tout en évitant de mesurer directement l’état quantique, ce qui détruirait la superposition.
+
+\subsubsection{Détection de l’erreur : syndrome quantique}
+
+Afin d’identifier la position de l’erreur sans observer directement les amplitudes $\alpha$ et $\beta$, on utilise un mécanisme appelé \textbf{mesure de syndrome}.
+
+L’idée est de comparer les qubits entre eux afin de détecter une incohérence locale.
+
+Deux opérateurs de stabilisation sont utilisés :
+
+\[
+Z_1Z_2
+\]
+
+et
+
+\[
+Z_2Z_3
+\]
+
+Ces opérateurs permettent de comparer la parité entre deux qubits voisins.
+
+Leur interprétation est la suivante :
+
+\begin{itemize}
+    \item si deux qubits sont identiques, le résultat vaut $+1$ ;
+    \item si deux qubits sont différents, le résultat vaut $-1$.
+\end{itemize}
+
+Par exemple :
+
+\[
+\ket{100}
+\]
+
+présente une différence entre les qubits 1 et 2, mais pas entre les qubits 2 et 3.
+
+Le syndrome observé devient alors :
+
+\[
+(-1,+1)
+\]
+
+ce qui indique une erreur sur le premier qubit.
+
+De même :
+
+\[
+(+1,-1)
+\]
+
+signale une erreur sur le troisième qubit, tandis que :
+
+\[
+(-1,-1)
+\]
+
+indique une erreur sur le deuxième qubit.
+
+On obtient ainsi la table de diagnostic suivante :
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\hline
+Erreur & $Z_1Z_2$ & $Z_2Z_3$ & Correction \\ \hline
+Aucune & $+1$ & $+1$ & $I$ \\
+$X_1$ & $-1$ & $+1$ & $X_1$ \\
+$X_2$ & $-1$ & $-1$ & $X_2$ \\
+$X_3$ & $+1$ & $-1$ & $X_3$ \\ \hline
+\end{tabular}
+\caption{Syndromes d’erreurs du code quantique à trois qubits.}
+\end{table}
+
+Cette procédure permet d’obtenir une information sur l’erreur sans mesurer directement le qubit logique.
+
+\subsubsection{Correction de l’erreur}
+
+Une fois le syndrome identifié, une opération corrective appropriée est appliquée.
+
+Par exemple :
+
+\begin{itemize}
+    \item si le syndrome indique une erreur sur le premier qubit, une porte $X$ est appliquée au premier qubit ;
+    \item si l’erreur concerne le deuxième qubit, une correction $X_2$ est effectuée ;
+    \item si l’erreur concerne le troisième qubit, une correction $X_3$ est appliquée.
+\end{itemize}
+
+Le système retrouve alors l’état logique initial :
+
+\[
+\ket{\psi_L}
+=
+\alpha\ket{000}
++
+\beta\ket{111}
+\]
+
+Ainsi, le code quantique à trois qubits permet de corriger une unique erreur de type bit-flip sans jamais mesurer directement l’état quantique transportant l’information. Ce mécanisme constitue l’un des fondements de la correction d’erreurs quantiques et servira de base à l’implémentation numérique réalisée dans la suite du projet.
+
+
+```latex id="a9x2mf"
 \subsection{Correction d'erreur quantique avec erreurs X, Y}
 
+Le code quantique à trois qubits présenté précédemment permet de corriger une unique erreur de type \textbf{bit-flip}, représentée par l’opérateur de Pauli $X$. Cependant, dans un système quantique réel, les erreurs ne se limitent pas à une simple inversion binaire. Les qubits peuvent également subir des modifications de phase ou des perturbations plus complexes.
+
+Il devient donc nécessaire d’étendre l’étude à d’autres types d’erreurs quantiques.
+
+\subsubsection{Limites du code bit-flip}
+
+Le code de répétition quantique à trois qubits repose sur l’encodage :
+
+\[
+\ket{\psi_L}
+=
+\alpha\ket{000}
++
+\beta\ket{111}
+\]
+
+et permet de corriger une erreur de type :
+
+\[
+X\ket{0}
+=
+\ket{1}
+\]
+
+\[
+X\ket{1}
+=
+\ket{0}
+\]
+
+Cependant, ce code ne protège pas contre les erreurs affectant uniquement la \textbf{phase} du qubit.
+
+Considérons l’opérateur de Pauli $Z$ :
+
+\[
+Z=
+\begin{pmatrix}
+1&0\\
+0&-1
+\end{pmatrix}
+\]
+
+Son action sur les états fondamentaux est donnée par :
+
+\[
+Z\ket{0}
+=
+\ket{0}
+\]
+
+\[
+Z\ket{1}
+=
+-\ket{1}
+\]
+
+Contrairement à l’erreur $X$, l’erreur $Z$ ne modifie pas directement la valeur observée lors d’une mesure dans la base computationnelle. Elle agit uniquement sur la phase relative du qubit.
+
+Appliquée au qubit logique encodé, une erreur sur le premier qubit produit :
+
+\[
+Z_1\ket{\psi_L}
+=
+\alpha\ket{000}
+-
+\beta\ket{111}
+\]
+
+Le signe de l’amplitude $\beta$ est inversé, ce qui modifie l’état quantique global sans changer immédiatement les valeurs mesurées.
+
+Or, le syndrome utilisé précédemment :
+
+\[
+Z_1Z_2
+\qquad
+Z_2Z_3
+\]
+
+ne permet pas de détecter cette erreur. En effet, les qubits restent identiques entre eux ; seule la phase est affectée.
+
+Le code bit-flip à trois qubits est donc insuffisant pour corriger des erreurs de phase.
+
+\subsubsection{Correction des erreurs de phase}
+
+Afin de traiter les erreurs de phase, il est possible de changer de base à l’aide de la porte de Hadamard :
+
+\[
+H
+=
+\frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1&1\\
+1&-1
+\end{pmatrix}
+\]
+
+Cette porte possède une propriété fondamentale :
+
+\[
+HZH=X
+\]
+
+Autrement dit, une erreur de phase peut être transformée en une erreur de bit-flip dans une base différente.
+
+En appliquant une transformation de Hadamard avant et après le processus de correction, il devient possible de détecter et corriger des erreurs de phase selon une procédure analogue à celle utilisée pour les erreurs $X$.
+
+\subsubsection{Erreur de type Y}
+
+Une autre classe importante d’erreurs est représentée par l’opérateur de Pauli $Y$ :
+
+\[
+Y=
+\begin{pmatrix}
+0&-i\\
+i&0
+\end{pmatrix}
+\]
+
+Son action sur les états fondamentaux est :
+
+\[
+Y\ket{0}
+=
+i\ket{1}
+\]
+
+\[
+Y\ket{1}
+=
+-i\ket{0}
+\]
+
+L’opérateur $Y$ peut être interprété comme une combinaison simultanée d’une erreur de type $X$ et d’une erreur de type $Z$ :
+
+\[
+Y=iXZ
+\]
+
+Une erreur $Y$ modifie donc à la fois :
+
+\begin{itemize}
+    \item la valeur du qubit (\textit{bit-flip}) ;
+    \item sa phase relative (\textit{phase-flip}).
+\end{itemize}
+
+Un simple code de répétition à trois qubits ne suffit alors plus à garantir une correction complète. Il devient nécessaire d’utiliser des codes correcteurs plus élaborés capables de traiter simultanément plusieurs types d’erreurs quantiques.
+
+\subsubsection{Discrétisation des erreurs quantiques}
+
+Un résultat fondamental de la correction d’erreurs quantiques est qu’une erreur arbitraire peut être décomposée sur la base des matrices de Pauli :
+
+\[
+I,
+\qquad
+X,
+\qquad
+Y,
+\qquad
+Z
+\]
+
+où :
+
+\begin{itemize}
+    \item $I$ représente l’absence d’erreur ;
+    \item $X$ correspond à une erreur de bit-flip ;
+    \item $Z$ correspond à une erreur de phase ;
+    \item $Y$ combine les deux effets.
+\end{itemize}
+
+Ainsi, même si les erreurs physiques réelles sont continues et complexes, il suffit en pratique de construire des mécanismes capables de corriger ces erreurs élémentaires. Cette propriété constitue le fondement théorique des codes correcteurs quantiques modernes.
+
 \subsection{Généralisation}
+
+Les codes présentés précédemment permettent de corriger des erreurs élémentaires spécifiques, comme les erreurs de type bit-flip ($X$) ou phase-flip ($Z$). Toutefois, les systèmes quantiques réels sont soumis à des perturbations plus complexes pouvant affecter simultanément plusieurs qubits et plusieurs types d’erreurs.
+
+Il devient alors nécessaire de construire des codes correcteurs plus robustes, capables de protéger l’information quantique contre un ensemble plus large de perturbations.
+
+\subsubsection{Le code de Shor}
+
+L’un des premiers codes correcteurs quantiques complets est le \textbf{code de Shor}, proposé par Peter Shor en 1995.
+
+L’idée principale consiste à combiner deux mécanismes de protection :
+
+\begin{itemize}
+    \item un code corrigeant les erreurs de type \textit{bit-flip} ($X$) ;
+    \item un code corrigeant les erreurs de type \textit{phase-flip} ($Z$).
+\end{itemize}
+
+Le code de Shor encode un qubit logique sur \textbf{neuf qubits physiques}. Les états logiques deviennent :
+
+\[
+\ket{0_L}
+=
+\frac{
+(\ket{000}+\ket{111})
+^{\otimes 3}
+}
+{2\sqrt{2}}
+\]
+
+\[
+\ket{1_L}
+=
+\frac{
+(\ket{000}-\ket{111})
+^{\otimes 3}
+}
+{2\sqrt{2}}
+\]
+
+L’information quantique est ainsi répartie sur plusieurs groupes de qubits, ce qui permet de détecter et corriger simultanément :
+
+\begin{itemize}
+    \item les erreurs de type $X$ ;
+    \item les erreurs de type $Z$ ;
+    \item les erreurs de type $Y$.
+\end{itemize}
+
+Le principe général repose sur une succession de mesures de syndrome permettant de localiser l’erreur sans mesurer directement l’état logique.
+
+Le code de Shor constitue une étape fondamentale dans le développement de la correction d’erreurs quantiques car il démontre qu’une protection complète de l’information quantique est théoriquement possible malgré le théorème de non-clonage.
+
+\subsubsection{Vers des codes plus avancés}
+
+Le code de Shor représente toutefois un coût important en ressources puisqu’il nécessite neuf qubits physiques pour protéger un seul qubit logique.
+
+Afin de réduire ce coût et d’améliorer la robustesse des systèmes quantiques, d’autres familles de codes correcteurs ont été développées.
+
+Parmi les plus importantes figurent :
+
+\begin{itemize}
+    \item le \textbf{code de Steane}, plus compact, utilisant sept qubits physiques ;
+    \item les \textbf{surface codes}, particulièrement adaptés aux architectures quantiques modernes développées par IBM et Google.
+\end{itemize}
+
+Ces méthodes reposent également sur des mesures de syndrome et sur l’utilisation de qubits auxiliaires permettant de détecter les erreurs sans détruire l’information quantique.
+
+Cependant, malgré les progrès théoriques, la correction d’erreurs quantiques reste aujourd’hui extrêmement coûteuse en ressources matérielles. Les ordinateurs quantiques actuels nécessitent encore un grand nombre de qubits physiques afin de protéger un nombre limité de qubits logiques.
+
+Dans la suite de ce projet, nous nous concentrerons sur l’implémentation numérique d’un code correcteur simple permettant de corriger une erreur de type bit-flip à l’aide de la bibliothèque \texttt{Qiskit}.
 
 
 \section{Résultats}
