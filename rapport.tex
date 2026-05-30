@@ -684,6 +684,77 @@ Une idée naturelle pourrait consister à reproduire la stratégie classique de 
 
 où le second qubit initialisé à $\ket{0}$ deviendrait une copie exacte du premier.
 
+\subsubsection{Produit tensoriel}
+
+En calcul quantique, lorsqu’un système contient plusieurs qubits, l’état global est représenté à l’aide du \textbf{produit tensoriel}, noté :
+
+\[
+\otimes
+\]
+
+Cette opération permet de combiner plusieurs états quantiques en un seul système.
+
+Par exemple, si deux qubits sont dans les états :
+
+\[
+\ket{0}
+\qquad
+\text{et}
+\qquad
+\ket{1}
+\]
+
+leur état combiné s’écrit :
+
+\[
+\ket{0}\otimes\ket{1}
+=
+\ket{01}
+\]
+
+En représentation vectorielle :
+
+\[
+\ket{0}
+=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+\qquad
+\ket{1}
+=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+\]
+
+et :
+
+\[
+\ket{01}
+=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+\otimes
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+1\\
+0\\
+0
+\end{pmatrix}
+\]
+
+Le produit tensoriel permet ainsi de représenter mathématiquement un système composé de plusieurs qubits, ce qui sera essentiel dans les mécanismes de correction d’erreurs quantiques.
+
 Cependant, cette opération est fondamentalement impossible à cause du \textbf{théorème de non-clonage quantique}.
 
 \begin{theorem}[Théorème de non-clonage]
@@ -740,7 +811,46 @@ Dans cette section, nous nous intéressons au cas le plus simple : la correction
 
 \subsubsection{Principe général}
 
-Une erreur de type $X$ correspond à une inversion de l’état du qubit, analogue à une erreur binaire classique :
+Une erreur de type \textbf{bit-flip} correspond à l’analogue quantique d’une inversion de bit classique. Dans un système classique, une telle erreur transforme :
+
+\[
+0
+\longrightarrow
+1
+\qquad
+\text{ou}
+\qquad
+1
+\longrightarrow
+0
+\]
+
+En calcul quantique, cette perturbation agit sur les états fondamentaux d’un qubit :
+
+\[
+\ket{0}
+\longrightarrow
+\ket{1}
+\]
+
+\[
+\ket{1}
+\longrightarrow
+\ket{0}
+\]
+
+Mathématiquement, cette transformation est modélisée par l’opérateur de Pauli :
+
+\[
+X
+=
+\begin{pmatrix}
+0&1\\
+1&0
+\end{pmatrix}
+\]
+
+agissant sur les états de base selon :
 
 \[
 X\ket{0}
@@ -754,17 +864,35 @@ X\ket{1}
 \ket{0}
 \]
 
-Mathématiquement, la porte de Pauli $X$ est représentée par la matrice :
+En représentation vectorielle :
 
 \[
-X=
+X
 \begin{pmatrix}
-0&1\\
-1&0
+1\\
+0
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+1
 \end{pmatrix}
 \]
 
-L’objectif est donc de protéger un qubit arbitraire :
+\[
+X
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+\]
+
+L’objectif de la correction d’erreurs quantiques est alors de protéger un qubit arbitraire :
 
 \[
 \ket{\psi}
@@ -776,7 +904,7 @@ L’objectif est donc de protéger un qubit arbitraire :
 
 contre une inversion accidentelle de l’un des qubits physiques du système.
 
-Pour cela, on utilise un \textbf{code de répétition quantique à trois qubits}, inspiré du mécanisme de redondance classique.
+Cependant, contrairement au cadre classique, il n’est pas possible de copier directement l’information quantique. On utilise donc un \textbf{code de répétition quantique à trois qubits}, dans lequel l’information est distribuée sur plusieurs qubits physiques.
 
 \subsubsection{Encodage du qubit logique}
 

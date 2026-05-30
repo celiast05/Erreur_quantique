@@ -16,19 +16,20 @@
 \contentsline {section}{\numberline {2}Théorie}{9}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Correction d'erreur classique}{9}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Limites de la correction classique en calcul quantique}{10}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Correction d'erreur quantique avec erreur X}{11}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.1}Produit tensoriel}{11}{subsubsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.3}Correction d'erreur quantique avec erreur X}{12}{subsection.2.3}%
 \contentsline {subsubsection}{\numberline {2.3.1}Principe général}{12}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Encodage du qubit logique}{12}{subsubsection.2.3.2}%
-\contentsline {subsubsection}{\numberline {2.3.3}Modélisation d’une erreur de type X}{13}{subsubsection.2.3.3}%
-\contentsline {subsubsection}{\numberline {2.3.4}Détection de l’erreur : syndrome quantique}{13}{subsubsection.2.3.4}%
-\contentsline {subsubsection}{\numberline {2.3.5}Correction de l’erreur}{14}{subsubsection.2.3.5}%
-\contentsline {subsection}{\numberline {2.4}Correction d'erreur quantique avec erreurs X, Y}{14}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.3.2}Encodage du qubit logique}{13}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Modélisation d’une erreur de type X}{14}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Détection de l’erreur : syndrome quantique}{14}{subsubsection.2.3.4}%
+\contentsline {subsubsection}{\numberline {2.3.5}Correction de l’erreur}{15}{subsubsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.4}Correction d'erreur quantique avec erreurs X, Y}{15}{subsection.2.4}%
 \contentsline {subsubsection}{\numberline {2.4.1}Limites du code bit-flip}{15}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Correction des erreurs de phase}{15}{subsubsection.2.4.2}%
-\contentsline {subsubsection}{\numberline {2.4.3}Erreur de type Y}{16}{subsubsection.2.4.3}%
-\contentsline {subsubsection}{\numberline {2.4.4}Discrétisation des erreurs quantiques}{16}{subsubsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {2.4.2}Correction des erreurs de phase}{16}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Erreur de type Y}{17}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Discrétisation des erreurs quantiques}{17}{subsubsection.2.4.4}%
 \contentsline {subsection}{\numberline {2.5}Généralisation}{17}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Le code de Shor}{17}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Vers des codes plus avancés}{17}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.1}Le code de Shor}{18}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Vers des codes plus avancés}{18}{subsubsection.2.5.2}%
 \contentsline {section}{\numberline {3}Résultats}{18}{section.3}%
-\contentsline {section}{\numberline {4}Conclusion}{18}{section.4}%
+\contentsline {section}{\numberline {4}Conclusion}{19}{section.4}%
