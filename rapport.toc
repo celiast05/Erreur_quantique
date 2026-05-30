@@ -1,0 +1,22 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}États quantiques}{2}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}Le qubit : unité fondamentale de l’information quantique}{2}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Principe de superposition}{3}{subsubsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.2}Portes quantiques}{3}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}La porte X}{4}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}La porte de Hadamard}{4}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}La porte Z}{5}{subsubsection.1.2.3}%
+\contentsline {subsubsection}{\numberline {1.2.4}La porte CNOT}{5}{subsubsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.3}Mesure quantique}{6}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Exemple d'algorithme et comparaison}{6}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Approche classique}{7}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Approche quantique : algorithme de Deutsch}{7}{subsubsection.1.4.2}%
+\contentsline {subsubsection}{\numberline {1.4.3}Comparaison entre approche classique et quantique}{8}{subsubsection.1.4.3}%
+\contentsline {section}{\numberline {2}Théorie}{8}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Correction d'erreur classique}{8}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Correction d'erreur quantique avec erreur X}{8}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Correction d'erreur quantique avec erreurs X, Y}{8}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Généralisation}{8}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Résultats}{8}{section.3}%
+\contentsline {section}{\numberline {4}Conclusion}{8}{section.4}%

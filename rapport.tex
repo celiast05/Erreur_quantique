@@ -193,6 +193,8 @@ En notation mathématique, cet état peut être représenté par :
 
 La superposition constitue une différence majeure entre le calcul classique et le calcul quantique. En effet, lorsqu’un système comporte plusieurs qubits, il devient possible de représenter simultanément un grand nombre d’états quantiques, ce qui explique le potentiel théorique considérable du calcul quantique.
 
+La manipulation de ces états quantiques nécessite des opérations spécifiques permettant de transformer les qubits au cours d’un calcul. Ces transformations sont réalisées à l’aide de portes quantiques.
+
 \subsection{Portes quantiques}
 
 Les calculs effectués par un ordinateur quantique reposent sur des transformations appliquées aux qubits. Ces transformations sont appelées \textit{portes quantiques}. Elles jouent un rôle analogue aux portes logiques classiques (NOT, AND, OR), mais manipulent directement des états quantiques.
@@ -328,6 +330,49 @@ Z
 
 Cette porte est particulièrement importante dans le cadre de la correction d’erreurs quantiques, notamment pour corriger les erreurs de phase.
 
+\subsubsection{La porte CNOT}
+
+La porte CNOT (\textit{Controlled-NOT}) agit sur deux qubits : un qubit de contrôle et un qubit cible.
+
+Son principe est le suivant :
+
+\begin{itemize}
+    \item si le qubit de contrôle est dans l’état $|0\rangle$, le second qubit reste inchangé ;
+    \item si le qubit de contrôle est dans l’état $|1\rangle$, une porte $X$ est appliquée au second qubit.
+\end{itemize}
+
+Son action peut être représentée par :
+
+\[
+|00\rangle \rightarrow |00\rangle
+\]
+
+\[
+|01\rangle \rightarrow |01\rangle
+\]
+
+\[
+|10\rangle \rightarrow |11\rangle
+\]
+
+\[
+|11\rangle \rightarrow |10\rangle
+\]
+
+Mathématiquement, sa représentation matricielle est :
+
+\[
+CNOT=
+\begin{pmatrix}
+1&0&0&0\\
+0&1&0&0\\
+0&0&0&1\\
+0&0&1&0
+\end{pmatrix}
+\]
+
+Cette porte est particulièrement importante dans le calcul quantique car elle permet de créer des corrélations entre qubits et intervient dans de nombreux protocoles de correction d’erreurs quantiques.
+
 \subsection{Mesure quantique}
 
 La mesure constitue un élément fondamental du calcul quantique. Contrairement à l’informatique classique, où l’état d’un bit peut être observé sans perturbation, la mesure d’un qubit modifie irréversiblement son état.
@@ -393,6 +438,7 @@ L’état initial de superposition disparaît donc définitivement après observ
 
 Cette propriété constitue une difficulté majeure dans le développement d’ordinateurs quantiques fiables. En effet, il devient impossible d’observer directement un qubit afin de détecter une erreur sans risquer de détruire l’information quantique qu’il contient. Cette contrainte explique la nécessité de développer des mécanismes spécifiques de correction d’erreurs quantiques.
 
+Les notions précédentes permettent de comprendre le fonctionnement d’algorithmes quantiques simples. Afin d’illustrer concrètement l’intérêt du calcul quantique par rapport aux approches classiques, nous présentons l’algorithme de Deutsch.
 \subsection{Exemple d'algorithme et comparaison}
 
 Afin d’illustrer les différences entre calcul classique et calcul quantique, il est intéressant de considérer un problème simple : déterminer si une fonction booléenne est constante ou équilibrée. Ce problème est au cœur de l’algorithme de Deutsch, l’un des premiers exemples montrant un avantage théorique du calcul quantique.
