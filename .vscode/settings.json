@@ -1,6 +1,8 @@
 {
-    "latex-workshop.latex.outDir": "./build",
+    "latex-workshop.latex.outDir": ".",
+    "latex-workshop.latex.auxDir": "./build",
     "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.latex.clean.enabled": true,
     "latex-workshop.latex.clean.fileTypes": [
         "*.aux",
         "*.bbl",
@@ -21,5 +23,26 @@
         "*.log",
         "*.fdb_latexmk",
         "*.synctex.gz"
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-pdf",
+                "-interaction=nonstopmode",
+                "-synctex=1",
+                "-f",
+                "-output-directory=.",
+                "-aux-directory=build",
+                "%DOC%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk (PDF root, aux in build)",
+            "tools": ["latexmk"]
+        }
     ]
 }
