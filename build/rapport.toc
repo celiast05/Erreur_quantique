@@ -1,34 +1,34 @@
 \babel@toc {french}{}\relax 
-\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
-\contentsline {subsection}{\numberline {1.1}États quantiques}{2}{subsection.1.1}%
-\contentsline {subsubsection}{\numberline {1.1.1}Le qubit : unité fondamentale de l’information quantique}{2}{subsubsection.1.1.1}%
-\contentsline {subsubsection}{\numberline {1.1.2}Principe de superposition}{3}{subsubsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.2}Portes quantiques}{3}{subsection.1.2}%
-\contentsline {subsubsection}{\numberline {1.2.1}La porte X}{4}{subsubsection.1.2.1}%
-\contentsline {subsubsection}{\numberline {1.2.2}La porte de Hadamard}{4}{subsubsection.1.2.2}%
-\contentsline {subsubsection}{\numberline {1.2.3}La porte Z}{5}{subsubsection.1.2.3}%
-\contentsline {subsubsection}{\numberline {1.2.4}La porte CNOT}{5}{subsubsection.1.2.4}%
-\contentsline {subsection}{\numberline {1.3}Mesure quantique}{6}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Exemple d'algorithme et comparaison}{6}{subsection.1.4}%
-\contentsline {subsubsection}{\numberline {1.4.1}Approche classique}{7}{subsubsection.1.4.1}%
-\contentsline {subsubsection}{\numberline {1.4.2}Approche quantique : algorithme de Deutsch}{7}{subsubsection.1.4.2}%
-\contentsline {subsubsection}{\numberline {1.4.3}Comparaison entre approche classique et quantique}{8}{subsubsection.1.4.3}%
-\contentsline {section}{\numberline {2}Théorie}{8}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Correction d'erreur classique}{8}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Limites de la correction classique en calcul quantique}{9}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Correction d'erreur quantique avec erreur X}{10}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Principe général}{11}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Encodage du qubit logique}{11}{subsubsection.2.3.2}%
-\contentsline {subsubsection}{\numberline {2.3.3}Modélisation d’une erreur de type X}{12}{subsubsection.2.3.3}%
-\contentsline {subsubsection}{\numberline {2.3.4}Détection de l’erreur : syndrome quantique}{12}{subsubsection.2.3.4}%
-\contentsline {subsubsection}{\numberline {2.3.5}Correction de l’erreur}{13}{subsubsection.2.3.5}%
-\contentsline {subsection}{\numberline {2.4}Correction d'erreur quantique avec erreurs X, Y}{13}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Limites du code bit-flip}{14}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Correction des erreurs de phase}{14}{subsubsection.2.4.2}%
-\contentsline {subsubsection}{\numberline {2.4.3}Erreur de type Y}{15}{subsubsection.2.4.3}%
-\contentsline {subsubsection}{\numberline {2.4.4}Discrétisation des erreurs quantiques}{15}{subsubsection.2.4.4}%
-\contentsline {subsection}{\numberline {2.5}Généralisation}{16}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Le code de Shor}{16}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Vers des codes plus avancés}{16}{subsubsection.2.5.2}%
-\contentsline {section}{\numberline {3}Résultats}{17}{section.3}%
-\contentsline {section}{\numberline {4}Conclusion}{17}{section.4}%
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}États quantiques}{3}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}Le qubit : unité fondamentale de l’information quantique}{3}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Principe de superposition}{4}{subsubsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.2}Portes quantiques}{4}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}La porte X}{5}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}La porte de Hadamard}{5}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}La porte Z}{6}{subsubsection.1.2.3}%
+\contentsline {subsubsection}{\numberline {1.2.4}La porte CNOT}{6}{subsubsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.3}Mesure quantique}{7}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Exemple d'algorithme et comparaison}{7}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Approche classique}{8}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Approche quantique : algorithme de Deutsch}{8}{subsubsection.1.4.2}%
+\contentsline {subsubsection}{\numberline {1.4.3}Comparaison entre approche classique et quantique}{9}{subsubsection.1.4.3}%
+\contentsline {section}{\numberline {2}Théorie}{9}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Correction d'erreur classique}{9}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Limites de la correction classique en calcul quantique}{10}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Correction d'erreur quantique avec erreur X}{11}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Principe général}{12}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Encodage du qubit logique}{12}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Modélisation d’une erreur de type X}{13}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Détection de l’erreur : syndrome quantique}{13}{subsubsection.2.3.4}%
+\contentsline {subsubsection}{\numberline {2.3.5}Correction de l’erreur}{14}{subsubsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.4}Correction d'erreur quantique avec erreurs X, Y}{14}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Limites du code bit-flip}{15}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Correction des erreurs de phase}{15}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Erreur de type Y}{16}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Discrétisation des erreurs quantiques}{16}{subsubsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.5}Généralisation}{17}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Le code de Shor}{17}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Vers des codes plus avancés}{17}{subsubsection.2.5.2}%
+\contentsline {section}{\numberline {3}Résultats}{18}{section.3}%
+\contentsline {section}{\numberline {4}Conclusion}{18}{section.4}%
