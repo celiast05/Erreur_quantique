@@ -1,0 +1,521 @@
+\documentclass[a4paper,12pt]{article}
+
+% ===== Packages =====
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}    % maths
+\usepackage{amssymb}    % symboles maths
+\usepackage{graphicx}   % images
+\usepackage{hyperref}   % liens cliquables
+\usepackage{geometry}   % marges
+\usepackage{float}      % placement images
+\usepackage{caption}
+\usepackage{booktabs}   % tableaux
+
+\geometry{margin=2.5cm}
+
+% ===== Informations =====
+\title{Correction d'erreur pour les circuits quantiques}
+\author{
+ASTIER Célia \\
+BULARD Yona \\
+EDOUARD Axel \\
+MECHAKRA Jhoneyd \\
+NELVA-PASQUAL Mathilde
+}
+
+\date{Mai 2026}
+
+\begin{document}
+
+% ===== Page de titre =====
+\maketitle
+
+% ===== Table des matières =====
+\tableofcontents
+\newpage
+
+% ===== Sections =====
+\section{Introduction}
+
+Avant d’aborder les mécanismes de correction d’erreurs quantiques, il est nécessaire d’introduire les notions fondamentales du calcul quantique, notamment les états quantiques, les portes quantiques et les mécanismes de mesure. 
+Contrairement à l’informatique classique, qui repose sur des bits pouvant uniquement prendre les valeurs $0$ ou $1$, l’informatique quantique manipule des objets appelés \textit{qubits} (\textit{quantum bits}), capables d’exploiter les propriétés de la mécanique quantique.
+
+\subsection{États quantiques}
+
+\subsubsection{Le qubit : unité fondamentale de l’information quantique}
+
+Le qubit constitue l’unité élémentaire de l’information quantique. Alors qu’un bit classique est nécessairement dans l’état $0$ ou dans l’état $1$, un qubit peut être représenté comme une combinaison linéaire de ces deux états fondamentaux.
+
+En notation physique, dite notation de Dirac, les deux états fondamentaux d’un qubit sont notés :
+
+\[
+|0\rangle
+\qquad
+|1\rangle
+\]
+
+Ces états se lisent respectivement \textit{« ket zéro »} et \textit{« ket un »}. Ils forment une base orthonormée de l’espace des états quantiques.
+
+Un qubit général peut alors être représenté sous la forme :
+
+\[
+|\psi\rangle
+=
+\alpha |0\rangle
++
+\beta |1\rangle
+\]
+
+où :
+
+\begin{itemize}
+    \item $\alpha \in \mathbb{C}$ et $\beta \in \mathbb{C}$ sont des amplitudes complexes ;
+    \item $|0\rangle$ et $|1\rangle$ représentent les états fondamentaux ;
+    \item les coefficients vérifient une condition de normalisation :
+\end{itemize}
+
+\[
+|\alpha|^2 + |\beta|^2 = 1
+\]
+
+Cette relation garantit que la somme des probabilités associées aux différents résultats possibles de mesure est égale à 1.
+
+En effet, lorsque le qubit est mesuré :
+
+\begin{itemize}
+    \item l’état $|0\rangle$ est obtenu avec une probabilité $|\alpha|^2$ ;
+    \item l’état $|1\rangle$ est obtenu avec une probabilité $|\beta|^2$.
+\end{itemize}
+
+D’un point de vue mathématique, les états fondamentaux peuvent être représentés sous forme vectorielle :
+
+\[
+|0\rangle
+=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+\qquad
+|1\rangle
+=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+\]
+
+Ainsi, le qubit général :
+
+\[
+|\psi\rangle
+=
+\alpha |0\rangle
++
+\beta |1\rangle
+\]
+
+peut être représenté mathématiquement sous la forme :
+
+\[
+|\psi\rangle
+=
+\begin{pmatrix}
+\alpha \\
+\beta
+\end{pmatrix}
+\]
+
+Un qubit correspond donc mathématiquement à un vecteur de l’espace vectoriel complexe $\mathbb{C}^2$.
+
+Cette représentation mathématique est fondamentale car les transformations appliquées aux qubits seront modélisées par des matrices, appelées portes quantiques.
+
+\subsubsection{Principe de superposition}
+
+
+L’une des propriétés fondamentales du calcul quantique est le principe de superposition. Contrairement à un bit classique qui ne peut prendre qu’une valeur déterminée ($0$ ou $1$), un qubit peut exister simultanément dans une combinaison de plusieurs états.
+
+Cette propriété est directement exprimée par l’écriture générale du qubit :
+
+\[
+|\psi\rangle
+=
+\alpha |0\rangle
++
+\beta |1\rangle
+\]
+
+Ainsi, avant toute mesure, le qubit n’est pas strictement dans l’état $|0\rangle$ ou dans l’état $|1\rangle$, mais dans une superposition de ces deux états.
+
+Par exemple, l’état :
+
+\[
+|\psi\rangle
+=
+\frac{1}{\sqrt{2}}|0\rangle
++
+\frac{1}{\sqrt{2}}|1\rangle
+\]
+
+correspond à une superposition équilibrée des deux états fondamentaux.
+
+Lors de la mesure, les probabilités associées sont données par :
+
+\[
+\left|
+\frac{1}{\sqrt{2}}
+\right|^2
+=
+\frac{1}{2}
+\]
+
+Le qubit possède donc :
+
+\begin{itemize}
+    \item une probabilité de $50\%$ d’être observé dans l’état $0$ ;
+    \item une probabilité de $50\%$ d’être observé dans l’état $1$.
+\end{itemize}
+
+En notation mathématique, cet état peut être représenté par :
+
+\[
+|\psi\rangle
+=
+\frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix}
+\]
+
+La superposition constitue une différence majeure entre le calcul classique et le calcul quantique. En effet, lorsqu’un système comporte plusieurs qubits, il devient possible de représenter simultanément un grand nombre d’états quantiques, ce qui explique le potentiel théorique considérable du calcul quantique.
+
+\subsection{Portes quantiques}
+
+Les calculs effectués par un ordinateur quantique reposent sur des transformations appliquées aux qubits. Ces transformations sont appelées \textit{portes quantiques}. Elles jouent un rôle analogue aux portes logiques classiques (NOT, AND, OR), mais manipulent directement des états quantiques.
+
+D’un point de vue mathématique, une porte quantique est représentée par une matrice agissant sur le vecteur représentant un qubit.
+
+\subsubsection{La porte X}
+
+La porte $X$, également appelée porte \textit{NOT quantique}, permet d’inverser les états fondamentaux du qubit.
+
+En notation physique :
+
+\[
+X|0\rangle = |1\rangle
+\]
+
+\[
+X|1\rangle = |0\rangle
+\]
+
+Elle agit donc comme une inversion de bit.
+
+En notation matricielle, la porte $X$ est représentée par :
+
+\[
+X
+=
+\begin{pmatrix}
+0 & 1\\
+1 & 0
+\end{pmatrix}
+\]
+
+Son action sur le qubit est obtenue par multiplication matricielle :
+
+\[
+X
+\begin{pmatrix}
+\alpha \\
+\beta
+\end{pmatrix}
+=
+\begin{pmatrix}
+\beta \\
+\alpha
+\end{pmatrix}
+\]
+
+La porte $X$ échange donc les amplitudes du qubit.
+
+\subsubsection{La porte de Hadamard}
+
+La porte de Hadamard, notée $H$, est l’une des portes les plus importantes du calcul quantique car elle permet de créer des superpositions.
+
+En notation physique :
+
+\[
+H|0\rangle
+=
+\frac{1}{\sqrt{2}}
+(|0\rangle+|1\rangle)
+\]
+
+\[
+H|1\rangle
+=
+\frac{1}{\sqrt{2}}
+(|0\rangle-|1\rangle)
+\]
+
+Ainsi, lorsqu’un qubit initialement dans l’état $|0\rangle$ traverse une porte Hadamard, il entre dans une superposition équilibrée.
+
+Mathématiquement, cette porte est représentée par :
+
+\[
+H
+=
+\frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1 & 1\\
+1 & -1
+\end{pmatrix}
+\]
+
+Par exemple :
+
+\[
+H
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix}
+\]
+
+Cette porte joue un rôle central dans de nombreux algorithmes quantiques.
+
+\subsubsection{La porte Z}
+
+La porte $Z$ agit sur la phase du qubit sans modifier directement le résultat de mesure.
+
+Son action physique est :
+
+\[
+Z|0\rangle
+=
+|0\rangle
+\]
+
+\[
+Z|1\rangle
+=
+-|1\rangle
+\]
+
+Elle modifie donc uniquement le signe de l’état $|1\rangle$.
+
+Sa représentation matricielle est :
+
+\[
+Z
+=
+\begin{pmatrix}
+1 & 0\\
+0 & -1
+\end{pmatrix}
+\]
+
+Cette porte est particulièrement importante dans le cadre de la correction d’erreurs quantiques, notamment pour corriger les erreurs de phase.
+
+\subsection{Mesure quantique}
+
+La mesure constitue un élément fondamental du calcul quantique. Contrairement à l’informatique classique, où l’état d’un bit peut être observé sans perturbation, la mesure d’un qubit modifie irréversiblement son état.
+
+Considérons un qubit général :
+
+\[
+|\psi\rangle
+=
+\alpha |0\rangle
++
+\beta |1\rangle
+\]
+
+avec :
+
+\[
+|\alpha|^2 + |\beta|^2 = 1
+\]
+
+La mesure du qubit renvoie nécessairement une valeur classique :
+
+\begin{itemize}
+    \item $0$ avec une probabilité $|\alpha|^2$ ;
+    \item $1$ avec une probabilité $|\beta|^2$.
+\end{itemize}
+
+Par exemple, si :
+
+\[
+|\psi\rangle
+=
+\frac{1}{\sqrt{2}}|0\rangle
++
+\frac{1}{\sqrt{2}}|1\rangle
+\]
+
+alors :
+
+\[
+\left|
+\frac{1}{\sqrt{2}}
+\right|^2
+=
+\frac{1}{2}
+\]
+
+La mesure renvoie donc :
+
+\begin{itemize}
+    \item $0$ avec une probabilité de $50\%$ ;
+    \item $1$ avec une probabilité de $50\%$.
+\end{itemize}
+
+Un aspect fondamental de la mesure quantique est le phénomène appelé \textit{effondrement de l’état quantique}. Une fois la mesure effectuée :
+
+\begin{itemize}
+    \item si le résultat est $0$, alors le qubit devient $|0\rangle$ ;
+    \item si le résultat est $1$, alors le qubit devient $|1\rangle$.
+\end{itemize}
+
+L’état initial de superposition disparaît donc définitivement après observation.
+
+Cette propriété constitue une difficulté majeure dans le développement d’ordinateurs quantiques fiables. En effet, il devient impossible d’observer directement un qubit afin de détecter une erreur sans risquer de détruire l’information quantique qu’il contient. Cette contrainte explique la nécessité de développer des mécanismes spécifiques de correction d’erreurs quantiques.
+
+\subsection{Exemple d'algorithme et comparaison}
+
+Afin d’illustrer les différences entre calcul classique et calcul quantique, il est intéressant de considérer un problème simple : déterminer si une fonction booléenne est constante ou équilibrée. Ce problème est au cœur de l’algorithme de Deutsch, l’un des premiers exemples montrant un avantage théorique du calcul quantique.
+
+\subsubsection{Approche classique}
+
+Considérons une fonction booléenne :
+
+\[
+f : \{0,1\} \rightarrow \{0,1\}
+\]
+
+L’objectif est de déterminer si la fonction est :
+
+\begin{itemize}
+    \item \textbf{constante}, c’est-à-dire :
+    \[
+    f(0)=f(1)
+    \]
+    
+    \item \textbf{équilibrée}, c’est-à-dire :
+    \[
+    f(0)\neq f(1)
+    \]
+\end{itemize}
+
+Dans un cadre classique, il est nécessaire d’évaluer la fonction sur les deux entrées possibles.
+
+L’algorithme classique peut être résumé ainsi :
+
+\begin{enumerate}
+    \item calculer $f(0)$ ;
+    \item calculer $f(1)$ ;
+    \item comparer les résultats obtenus :
+    \begin{itemize}
+        \item si $f(0)=f(1)$, la fonction est constante ;
+        \item sinon, elle est équilibrée.
+    \end{itemize}
+\end{enumerate}
+
+Ainsi, un algorithme classique nécessite deux évaluations de la fonction dans le pire des cas.
+
+\subsubsection{Approche quantique : algorithme de Deutsch}
+
+L’algorithme de Deutsch constitue l’un des premiers algorithmes quantiques démontrant un avantage théorique sur les méthodes classiques.
+
+Le principe consiste à utiliser un \textit{oracle quantique} $U_f$ capable d’encoder la fonction $f$ selon la transformation suivante :
+
+\[
+U_f
+:
+|x\rangle|y\rangle
+\mapsto
+|x\rangle
+|y \oplus f(x)\rangle
+\]
+
+où $\oplus$ désigne l’opération XOR (addition modulo 2).
+
+L’algorithme se déroule selon les étapes suivantes :
+
+\begin{enumerate}
+    \item Préparer les deux qubits dans l’état initial :
+    
+    \[
+    |0\rangle|1\rangle
+    \]
+
+    \item Appliquer une porte de Hadamard sur chacun des qubits ;
+
+    \item Appliquer l’oracle quantique $U_f$ ;
+
+    \item Appliquer une nouvelle porte de Hadamard sur le premier qubit ;
+
+    \item Mesurer le premier qubit.
+\end{enumerate}
+
+Le résultat de la mesure permet directement de conclure :
+
+\begin{itemize}
+    \item si le résultat mesuré est $0$, alors la fonction est constante ;
+    \item si le résultat mesuré est $1$, alors la fonction est équilibrée.
+\end{itemize}
+
+Contrairement à l’approche classique, une seule interrogation de l’oracle est nécessaire.
+
+\subsubsection{Comparaison entre approche classique et quantique}
+
+La principale différence entre les deux approches réside dans le nombre d’évaluations de la fonction.
+
+\begin{itemize}
+    \item \textbf{Approche classique :}
+    
+    Deux évaluations de la fonction sont nécessaires afin de comparer séparément les valeurs $f(0)$ et $f(1)$.
+
+    \item \textbf{Approche quantique :}
+    
+    Une seule interrogation de l’oracle quantique suffit grâce à l’exploitation des phénomènes de superposition et d’interférences quantiques.
+\end{itemize}
+
+L’algorithme de Deutsch met ainsi en évidence un avantage fondamental du calcul quantique : la capacité d’extraire certaines propriétés globales d’une fonction avec un nombre réduit de requêtes par rapport à un algorithme classique.
+
+\section{Théorie}
+
+Texte ici.
+
+\subsection{Correction d'erreur classique}
+
+Encore du texte.
+
+\subsection{Correction d'erreur quantique avec erreur X}
+
+\subsection{Correction d'erreur quantique avec erreurs X, Y}
+
+\subsection{Généralisation}
+
+
+\section{Résultats}
+
+Résultats ici.
+
+\section{Conclusion}
+
+Conclusion ici.
+
+\end{document}
