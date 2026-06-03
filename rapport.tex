@@ -16,6 +16,9 @@
 \usepackage{physics}    % notation de Dirac \ket, \bra
 \usepackage{amsthm}     % environnement theorem
 \usepackage{currfile}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+\usepackage{float}
 
 \newtheorem{theorem}{Théorème}
 
@@ -250,6 +253,21 @@ X
 
 La porte $X$ échange donc les amplitudes du qubit.
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\node at (0,0) {$\ket{\psi}$};
+\draw (0.7,0) -- (1.5,0);
+
+\draw (1.5,-0.3) rectangle (2.2,0.3);
+\node at (1.85,0) {$X$};
+
+\draw (2.2,0) -- (3,0);
+\node at (3.5,0) {$X\ket{\psi}$};
+\end{tikzpicture}
+\caption{Circuit quantique représentant l’application de la porte $X$.}
+\end{figure}
+
 \subsubsection{La porte de Hadamard}
 
 La porte de Hadamard, notée $H$, est l’une des portes les plus importantes du calcul quantique car elle permet de créer des superpositions.
@@ -302,6 +320,21 @@ H
 
 Cette porte joue un rôle central dans de nombreux algorithmes quantiques.
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\node at (0,0) {$\ket{\psi}$};
+\draw (0.7,0) -- (1.5,0);
+
+\draw (1.5,-0.3) rectangle (2.2,0.3);
+\node at (1.85,0) {$H$};
+
+\draw (2.2,0) -- (3,0);
+\node at (3.5,0) {$H\ket{\psi}$};
+\end{tikzpicture}
+\caption{Circuit quantique représentant la porte de Hadamard.}
+\end{figure}
+
 \subsubsection{La porte Z}
 
 La porte $Z$ agit sur la phase du qubit sans modifier directement le résultat de mesure.
@@ -334,6 +367,25 @@ Z
 \]
 
 Cette porte est particulièrement importante dans le cadre de la correction d’erreurs quantiques, notamment pour corriger les erreurs de phase.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+\node at (0,0) {$\ket{\psi}$};
+
+\draw (0.7,0) -- (1.5,0);
+
+\draw (1.5,-0.3) rectangle (2.2,0.3);
+\node at (1.85,0) {$Z$};
+
+\draw (2.2,0) -- (3,0);
+
+\node at (3.7,0) {$Z\ket{\psi}$};
+
+\end{tikzpicture}
+\caption{Circuit quantique représentant l’application de la porte de Pauli $Z$.}
+\end{figure}
 
 \subsubsection{La porte CNOT}
 
@@ -377,6 +429,271 @@ CNOT=
 \]
 
 Cette porte est particulièrement importante dans le calcul quantique car elle permet de créer des corrélations entre qubits et intervient dans de nombreux protocoles de correction d’erreurs quantiques.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% Ligne 1
+\draw (0,1) -- (4,1);
+\node[left] at (0,1) {$\ket{x}$};
+
+% Ligne 2
+\draw (0,0) -- (4,0);
+\node[left] at (0,0) {$\ket{y}$};
+
+% Contrôle
+\filldraw (2,1) circle (2pt);
+
+% Ligne verticale
+\draw (2,1) -- (2,0);
+
+% Target
+\draw (2,0) circle (0.18);
+\draw (1.82,0) -- (2.18,0);
+\draw (2,-0.18) -- (2,0.18);
+
+\end{tikzpicture}
+\caption{Représentation de la porte CNOT.}
+\end{figure}
+
+\subsection{Exemples d’application des portes quantiques}
+
+\subsubsection{Application de la porte X}
+
+Considérons un qubit initialement dans l’état :
+
+\[
+\ket{0}
+=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+\]
+
+L’application de la porte de Pauli $X$ donne :
+
+\[
+X\ket{0}
+=
+\begin{pmatrix}
+0&1\\
+1&0
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+\ket{1}
+\]
+
+La porte $X$ agit donc comme une inversion du qubit, analogue à une porte NOT classique.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+\node at (0,0) {$\ket{0}$};
+
+\draw (0.7,0) -- (1.5,0);
+
+\draw (1.5,-0.3) rectangle (2.2,0.3);
+\node at (1.85,0) {$X$};
+
+\draw (2.2,0) -- (3,0);
+
+\node at (3.7,0) {$\ket{1}$};
+
+\end{tikzpicture}
+\caption{Application de la porte $X$ sur un qubit dans l’état $\ket{0}$.}
+\end{figure}
+
+\subsubsection{Application de la porte Hadamard}
+
+Considérons un qubit initialement dans l’état :
+
+\[
+\ket{0}
+\]
+
+La porte de Hadamard transforme cet état selon :
+
+\[
+H\ket{0}
+=
+\frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1&1\\
+1&-1
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\frac{1}{\sqrt{2}}
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix}
+\]
+
+ce qui correspond à :
+
+\[
+H\ket{0}
+=
+\frac{1}{\sqrt{2}}
+(
+\ket{0}
++
+\ket{1}
+)
+\]
+
+Le qubit est alors placé dans une superposition équilibrée : lors d’une mesure, les états $0$ et $1$ seront obtenus avec une probabilité de $50\%$.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+\node at (0,0) {$\ket{0}$};
+
+\draw (0.7,0) -- (1.5,0);
+
+\draw (1.5,-0.3) rectangle (2.2,0.3);
+\node at (1.85,0) {$H$};
+
+\draw (2.2,0) -- (3,0);
+
+\node at (4.5,0) {$\frac{1}{\sqrt{2}}(\ket{0}+\ket{1})$};
+
+\end{tikzpicture}
+\caption{Création d’une superposition par la porte Hadamard.}
+\end{figure}
+
+\subsubsection{Application de la porte Z}
+
+Considérons un qubit dans l’état :
+
+\[
+\ket{1}
+=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+\]
+
+L’application de la porte $Z$ donne :
+
+\[
+Z\ket{1}
+=
+\begin{pmatrix}
+1&0\\
+0&-1
+\end{pmatrix}
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+-1
+\end{pmatrix}
+=
+-\ket{1}
+\]
+
+La porte $Z$ modifie uniquement la phase du qubit sans changer directement la valeur observée lors d’une mesure.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+\node at (0,0) {$\ket{1}$};
+
+\draw (0.7,0) -- (1.5,0);
+
+\draw (1.5,-0.3) rectangle (2.2,0.3);
+\node at (1.85,0) {$Z$};
+
+\draw (2.2,0) -- (3,0);
+
+\node at (3.7,0) {$-\ket{1}$};
+
+\end{tikzpicture}
+\caption{Application de la porte $Z$ sur un qubit dans l’état $\ket{1}$.}
+\end{figure}
+
+\subsubsection{Application de la porte CNOT}
+
+Considérons le système à deux qubits :
+
+\[
+\ket{10}
+\]
+
+où le premier qubit joue le rôle de contrôle.
+
+L’action de la porte CNOT donne :
+
+\[
+\text{CNOT}\ket{10}
+=
+\ket{11}
+\]
+
+car le premier qubit est dans l’état $\ket{1}$, ce qui provoque une inversion du second qubit.
+
+En revanche :
+
+\[
+\text{CNOT}\ket{00}
+=
+\ket{00}
+\]
+
+car le qubit de contrôle est dans l’état $\ket{0}$.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% Ligne 1
+\draw (0,1) -- (4,1);
+\node[left] at (0,1) {$\ket{1}$};
+
+% Ligne 2
+\draw (0,0) -- (4,0);
+\node[left] at (0,0) {$\ket{0}$};
+
+% Contrôle
+\filldraw (2,1) circle (2pt);
+
+% Ligne verticale
+\draw (2,1) -- (2,0);
+
+% Target
+\draw (2,0) circle (0.18);
+\draw (1.82,0) -- (2.18,0);
+\draw (2,-0.18) -- (2,0.18);
+
+\node[right] at (4,1) {$\ket{1}$};
+\node[right] at (4,0) {$\ket{1}$};
+
+\end{tikzpicture}
+\caption{Application de la porte CNOT sur l’état $\ket{10}$.}
+\end{figure}
 
 \subsection{Mesure quantique}
 
@@ -1120,8 +1437,6 @@ Le système retrouve alors l’état logique initial :
 
 Ainsi, le code quantique à trois qubits permet de corriger une unique erreur de type bit-flip sans jamais mesurer directement l’état quantique transportant l’information. Ce mécanisme constitue l’un des fondements de la correction d’erreurs quantiques et servira de base à l’implémentation numérique réalisée dans la suite du projet.
 
-
-```latex id="a9x2mf"
 \subsection{Correction d'erreur quantique avec erreurs X, Y}
 
 Le code quantique à trois qubits présenté précédemment permet de corriger une unique erreur de type \textbf{bit-flip}, représentée par l’opérateur de Pauli $X$. Cependant, dans un système quantique réel, les erreurs ne se limitent pas à une simple inversion binaire. Les qubits peuvent également subir des modifications de phase ou des perturbations plus complexes.
