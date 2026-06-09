@@ -434,27 +434,125 @@ Cette porte est particulièrement importante dans le calcul quantique car elle p
 \centering
 \begin{tikzpicture}
 
-% Ligne 1
-\draw (0,1) -- (4,1);
+% Ligne 1 (Contrôle) : Entrée à gauche, sortie à droite
 \node[left] at (0,1) {$\ket{x}$};
+\draw (0,1) -- (4,1);
+\node[right] at (4,1) {$\ket{x}$};
 
-% Ligne 2
-\draw (0,0) -- (4,0);
+% Ligne 2 (Cible) : Entrée à gauche, sortie calculée à droite
 \node[left] at (0,0) {$\ket{y}$};
+\draw (0,0) -- (4,0);
+\node[right] at (4,0) {$\ket{x \oplus y}$};
 
-% Contrôle
+% Point de contrôle noir (Qubit du haut)
 \filldraw (2,1) circle (2pt);
 
-% Ligne verticale
+% Ligne verticale de liaison
 \draw (2,1) -- (2,0);
 
-% Target
+% Symbole cible ⊕ (Qubit du bas)
 \draw (2,0) circle (0.18);
 \draw (1.82,0) -- (2.18,0);
 \draw (2,-0.18) -- (2,0.18);
 
 \end{tikzpicture}
-\caption{Représentation de la porte CNOT.}
+\caption{Représentation de la porte CNOT avec ses états d'entrée et de sortie.}
+\end{figure}
+
+\subsubsection{La porte de Toffoli}
+
+La porte de Toffoli, également appelée \textbf{porte CCNOT} (\textit{Controlled-Controlled-NOT}), est une généralisation de la porte CNOT à trois qubits.
+
+Elle agit sur :
+
+\begin{itemize}
+    \item deux qubits de contrôle ;
+    \item un qubit cible.
+\end{itemize}
+
+Son principe est le suivant :
+
+\begin{itemize}
+    \item si les deux qubits de contrôle sont dans l’état $\ket{1}$, alors une porte $X$ est appliquée au qubit cible ;
+    \item sinon, le qubit cible reste inchangé.
+\end{itemize}
+
+Mathématiquement, son action peut être décrite par :
+
+\[
+\ket{abc}
+\longmapsto
+\ket{ab(c \oplus ab)}
+\]
+
+où :
+
+\[
+a,b,c\in\{0,1\}
+\]
+
+et $\oplus$ désigne l’addition modulo 2 (XOR).
+
+Par exemple :
+
+\[
+\ket{110}
+\longrightarrow
+\ket{111}
+\]
+
+car les deux qubits de contrôle valent $1$.
+
+En revanche :
+
+\[
+\ket{100}
+\longrightarrow
+\ket{100}
+\]
+
+puisqu’un seul qubit de contrôle est activé.
+
+La porte de Toffoli joue un rôle important en informatique quantique car elle permet de réaliser des opérations logiques réversibles et intervient dans certains protocoles de correction d’erreurs quantiques.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% Ligne 1 (Contrôle 1)
+\node[left] at (0,2) {$\ket{a}$};
+\draw (0,2) -- (5,2);
+\node[right] at (5,2) {$\ket{a}$};
+
+% Ligne 2 (Contrôle 2)
+\node[left] at (0,1) {$\ket{b}$};
+\draw (0,1) -- (5,1);
+\node[right] at (5,1) {$\ket{b}$};
+
+% Ligne 3 (Cible)
+\node[left] at (0,0) {$\ket{c}$};
+\draw (0,0) -- (5,0);
+% Option standard : \node[right] at (5,0) {$\ket{a \cdot b \oplus c}$};
+% Option explicite avec modulo 2 :
+\node[right] at (5,0) {$\ket{c + (ab)}$};
+
+% Point de contrôle 1 (Qubit du haut)
+\filldraw (2,2) circle (2pt);
+
+% Point de contrôle 2 (Qubit du milieu)
+\filldraw (2,1) circle (2pt);
+
+% Ligne verticale qui relie les trois qubits
+\draw (2,2) -- (2,0);
+
+% Symbole cible ⊕ (Qubit du bas)
+\draw (2,0) circle (0.18);
+\draw (1.82,0) -- (2.18,0);
+\draw (2,-0.18) -- (2,0.18);
+
+\end{tikzpicture}
+\caption{Représentation de la porte de Toffoli (CCNOT) avec ses états d'entrée et de sortie.}
+\label{fig:toffoli}
 \end{figure}
 
 \subsection{Exemples d’application des portes quantiques}
@@ -695,6 +793,107 @@ car le qubit de contrôle est dans l’état $\ket{0}$.
 \caption{Application de la porte CNOT sur l’état $\ket{10}$.}
 \end{figure}
 
+\subsubsection{Application de la porte de Toffoli}
+
+Considérons l’état :
+
+\[
+\ket{110}
+\]
+
+L’application de la porte de Toffoli donne :
+
+\[
+CCNOT\ket{110}
+=
+\ket{111}
+\]
+
+car les deux qubits de contrôle valent $\ket{1}$, ce qui active une inversion du troisième qubit.
+
+En revanche :
+
+\[
+CCNOT\ket{100}
+=
+\ket{100}
+\]
+
+puisque les conditions d’activation ne sont pas réunies.
+
+\begin{figure}[H]
+\centering
+
+% ================= CAS 1 : ACTIVATION =================
+\begin{minipage}{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+
+% Qubit 1 (Contrôle)
+\node[left] at (0,2) {$\ket{1}$};
+\draw (0,2) -- (3,2);
+\node[right] at (3,2) {$\ket{1}$};
+
+% Qubit 2 (Contrôle)
+\node[left] at (0,1) {$\ket{1}$};
+\draw (0,1) -- (3,1);
+\node[right] at (3,1) {$\ket{1}$};
+
+% Qubit 3 (Cible) -> Inversé !
+\node[left] at (0,0) {$\ket{0}$};
+\draw (0,0) -- (3,0);
+\node[right] at (3,0) {$\ket{1}$};
+
+% Dessin de la porte Toffoli (au milieu à x=1.5)
+\filldraw (1.5,2) circle (2pt);
+\filldraw (1.5,1) circle (2pt);
+\draw (1.5,2) -- (1.5,0);
+\draw (1.5,0) circle (0.18);
+\draw (1.32,0) -- (1.68,0);
+\draw (1.5,-0.18) -- (1.5,0.18);
+
+\end{tikzpicture}
+\vskip 2mm
+\small \textbf{Cas 1 :} $CCNOT\ket{110} = \ket{111}$
+\end{minipage}
+\hfill
+% ================= CAS 2 : INACTIF =================
+\begin{minipage}{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+
+% Qubit 1 (Contrôle)
+\node[left] at (0,2) {$\ket{1}$};
+\draw (0,2) -- (3,2);
+\node[right] at (3,2) {$\ket{1}$};
+
+% Qubit 2 (Contrôle) -> Vaut 0, bloque l'activation
+\node[left] at (0,1) {$\ket{0}$};
+\draw (0,1) -- (3,1);
+\node[right] at (3,1) {$\ket{0}$};
+
+% Qubit 3 (Cible) -> Inchangé !
+\node[left] at (0,0) {$\ket{0}$};
+\draw (0,0) -- (3,0);
+\node[right] at (3,0) {$\ket{0}$};
+
+% Dessin de la porte Toffoli (au milieu à x=1.5)
+\filldraw (1.5,2) circle (2pt);
+\filldraw (1.5,1) circle (2pt);
+\draw (1.5,2) -- (1.5,0);
+\draw (1.5,0) circle (0.18);
+\draw (1.32,0) -- (1.68,0);
+\draw (1.5,-0.18) -- (1.5,0.18);
+
+\end{tikzpicture}
+\vskip 2mm
+\small \textbf{Cas 2 :} $CCNOT\ket{100} = \ket{100}$
+\end{minipage}
+
+\vskip 5mm
+\caption{Exemples d'application de la porte de Toffoli selon l'état des qubits de contrôle.}
+\label{fig:exemples_toffoli}
+\end{figure}
 
 \subsection{Mesure quantique}
 
@@ -847,6 +1046,114 @@ Le résultat de la mesure permet directement de conclure :
 \end{itemize}
 
 Contrairement à l’approche classique, une seule interrogation de l’oracle est nécessaire.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% =====================================================
+% LIGNES DES QUBITS
+% =====================================================
+
+% Premier qubit
+\node[left] at (0,1.5) {$\ket{0}$};
+\draw (0,1.5) -- (0.6,1.5);
+\draw (1.3,1.5) -- (2.2,1.5);
+\draw (3.4,1.5) -- (4.2,1.5);
+\draw (4.9,1.5) -- (5.7,1.5);
+
+% Ligne classique après mesure
+\draw[double, distance=2pt] (6.4,1.5) -- (8.8,1.5);
+
+\node[right] at (8.8,1.8)
+{\small $0$ : fonction constante};
+
+\node[right] at (8.8,1.2)
+{\small $1$ : fonction équilibrée};
+
+% Deuxième qubit
+\node[left] at (0,0) {$\ket{1}$};
+\draw (0,0) -- (0.6,0);
+\draw (1.3,0) -- (2.2,0);
+\draw (3.4,0) -- (8.0,0);
+
+% =====================================================
+% PORTES QUANTIQUES
+% =====================================================
+
+% Hadamard initial qubit 1
+\draw (0.6,1.15) rectangle (1.3,1.85);
+\node at (0.95,1.5) {$H$};
+
+% Hadamard initial qubit 2
+\draw (0.6,-0.35) rectangle (1.3,0.35);
+\node at (0.95,0) {$H$};
+
+% Oracle Uf
+\draw[line width=0.8pt] (2.2,-0.6) rectangle (3.4,2.1);
+\node at (2.8,0.75) {\Large $U_f$};
+
+% Deuxième Hadamard
+\draw (4.2,1.15) rectangle (4.9,1.85);
+\node at (4.55,1.5) {$H$};
+
+% =====================================================
+% MESURE
+% =====================================================
+
+% Bloc mesure
+\draw (5.7,1.15) rectangle (6.4,1.85);
+
+% Arc du symbole de mesure
+\draw (5.88,1.3) arc (180:0:0.23);
+
+% Aiguille
+\draw[->, >=stealth]
+(6.05,1.3)
+--
+(6.28,1.72);
+
+% =====================================================
+% ETATS INTERMEDIAIRES
+% =====================================================
+
+\draw[dashed, gray]
+(0.3,-0.9)
+--
+(0.3,2.4)
+node[above]
+{\small $\ket{\psi_0}$};
+
+\draw[dashed, gray]
+(1.75,-0.9)
+--
+(1.75,2.4)
+node[above]
+{\small $\ket{\psi_1}$};
+
+\draw[dashed, gray]
+(3.8,-0.9)
+--
+(3.8,2.4)
+node[above]
+{\small $\ket{\psi_2}$};
+
+\draw[dashed, gray]
+(5.3,-0.9)
+--
+(5.3,2.4)
+node[above]
+{\small $\ket{\psi_3}$};
+
+\end{tikzpicture}
+
+\caption{
+Circuit quantique de l’algorithme de Deutsch.
+}
+
+\label{fig:circuit_deutsch}
+
+\end{figure}
 
 \subsubsection{Comparaison entre approche classique et quantique}
 
