@@ -21,22 +21,30 @@
 \contentsline {subsubsection}{\numberline {1.5.2}Approche quantique : algorithme de Deutsch}{11}{subsubsection.1.5.2}%
 \contentsline {subsubsection}{\numberline {1.5.3}Comparaison entre approche classique et quantique}{13}{subsubsection.1.5.3}%
 \contentsline {section}{\numberline {2}Théorie}{13}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Correction d'erreur classique}{13}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Limites de la correction classique en calcul quantique}{14}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Produit tensoriel}{15}{subsubsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.3}Correction d'erreur quantique avec erreur X}{16}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Principe général}{16}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Encodage du qubit logique}{17}{subsubsection.2.3.2}%
-\contentsline {subsubsection}{\numberline {2.3.3}Modélisation d’une erreur de type X}{18}{subsubsection.2.3.3}%
-\contentsline {subsubsection}{\numberline {2.3.4}Détection de l’erreur : syndrome quantique}{19}{subsubsection.2.3.4}%
-\contentsline {subsubsection}{\numberline {2.3.5}Correction de l’erreur}{20}{subsubsection.2.3.5}%
-\contentsline {subsection}{\numberline {2.4}Correction d'erreur quantique avec erreurs X, Y}{20}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Limites du code bit-flip}{20}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Correction des erreurs de phase}{21}{subsubsection.2.4.2}%
-\contentsline {subsubsection}{\numberline {2.4.3}Erreur de type Y}{22}{subsubsection.2.4.3}%
-\contentsline {subsubsection}{\numberline {2.4.4}Discrétisation des erreurs quantiques}{22}{subsubsection.2.4.4}%
-\contentsline {subsection}{\numberline {2.5}Généralisation}{22}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Le code de Shor}{23}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Vers des codes plus avancés}{23}{subsubsection.2.5.2}%
-\contentsline {section}{\numberline {3}Résultats}{23}{section.3}%
-\contentsline {section}{\numberline {4}Conclusion}{24}{section.4}%
+\contentsline {subsection}{\numberline {2.1}Sources physiques du bruit quantique}{13}{subsection.2.1}%
+\contentsline {paragraph}{La décohérence.}{13}{section*.13}%
+\contentsline {paragraph}{Les erreurs de portes.}{13}{section*.14}%
+\contentsline {paragraph}{Les erreurs de mesure.}{13}{section*.15}%
+\contentsline {subsection}{\numberline {2.2}Correction d'erreur classique}{14}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Limites de la correction classique en calcul quantique}{15}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Produit tensoriel}{15}{subsubsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.4}Correction d'erreur quantique avec erreur X}{17}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Principe général}{17}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Encodage du qubit logique}{18}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Modélisation d’une erreur de type X}{19}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Détection de l’erreur : syndrome quantique}{19}{subsubsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {2.4.5}Correction de l’erreur}{21}{subsubsection.2.4.5}%
+\contentsline {subsection}{\numberline {2.5}Correction d'erreur quantique avec erreurs X, Y}{21}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Limites du code bit-flip}{21}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Correction des erreurs de phase}{22}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.3}Erreur de type Y}{22}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.4}Discrétisation des erreurs quantiques}{23}{subsubsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.6}Généralisation}{23}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}Le code de Shor}{23}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Vers des codes plus avancés}{24}{subsubsection.2.6.2}%
+\contentsline {section}{\numberline {3}Résultats}{24}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Implémentation du circuit}{24}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Protection d'un état de base}{25}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Protection d'une superposition}{26}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Interprétation}{26}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Conclusion}{26}{section.4}%

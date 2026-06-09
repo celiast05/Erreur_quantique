@@ -1125,6 +1125,51 @@ L’algorithme de Deutsch met ainsi en évidence un avantage fondamental du calc
 
 \section{Théorie}
 
+\subsection{Sources physiques du bruit quantique}
+
+Les erreurs de type $X$, $Y$ et $Z$ introduites dans ce rapport ne sont pas de
+simples objets mathématiques : elles modélisent des phénomènes physiques bien
+réels qui perturbent les qubits. On distingue trois grandes sources de bruit.
+
+\paragraph{La décohérence.} C'est la source la plus fondamentale. Un qubit
+n'est jamais parfaitement isolé : il interagit en permanence avec son
+environnement (champs électromagnétiques parasites, agitation thermique,
+couplage avec les qubits voisins). Cette interaction détruit progressivement la
+\emph{cohérence} de la superposition, c'est-à-dire la relation de phase entre
+les amplitudes $\alpha$ et $\beta$ d'un état $|\psi\rangle = \alpha|0\rangle +
+\beta|1\rangle$. La décohérence se traduit principalement par des erreurs de
+phase (type $Z$) et, via l'amortissement d'amplitude, peut également provoquer
+des inversions de bit (type $X$).
+
+\paragraph{Les erreurs de portes.} Elles proviennent de l'imperfection des
+opérations physiques. Une porte quantique est réalisée par une impulsion (laser
+ou micro-onde) de durée et d'intensité finies. Une légère imprécision, comme une
+sur-rotation ou une sous-rotation, fait dévier l'état obtenu de l'état attendu,
+ce qui revient à appliquer une petite erreur $X$, $Z$, ou une combinaison des
+deux.
+
+\paragraph{Les erreurs de mesure.} Lors de la lecture de l'état d'un qubit, le
+résultat enregistré peut être erroné. Dans notre code correcteur, une telle
+erreur fausse directement le \emph{syndrome}, et donc le diagnostic : la
+correction risque alors d'être appliquée au mauvais qubit, voire d'introduire
+une erreur là où il n'y en avait pas.
+
+\medskip
+
+Ces sources de bruit sont d'autant plus problématiques que les états quantiques
+manipulés sont \textbf{fragiles}. Une superposition perd toute son information
+dès que sa phase relative est brouillée. De plus, dans un état \emph{intriqué}
+comme l'état logique $|\psi_L\rangle = \alpha|000\rangle + \beta|111\rangle$,
+l'information est répartie de manière non locale sur plusieurs qubits : une
+erreur sur un seul qubit physique modifie l'état global, et une opération
+défectueuse peut \emph{propager} cette erreur d'un qubit vers un autre. C'est
+précisément cette fragilité qui rend la correction d'erreurs indispensable. Le
+résultat de discrétisation des erreurs quantiques (sous-section~2.4.4) est ce
+qui la rend possible : puisque toute erreur physique
+continue se décompose sur les opérateurs élémentaires $I, X, Y, Z$, il suffit de
+savoir corriger ces erreurs élémentaires pour corriger n'importe quelle
+perturbation réelle.
+
 \subsection{Correction d'erreur classique}
 
 Avant d’introduire les mécanismes de correction d’erreurs quantiques, il est utile de rappeler le principe de correction d’erreurs utilisé en informatique classique. Dans un système classique, les données sont généralement protégées par des techniques de \textbf{redondance}, consistant à copier plusieurs fois une même information afin de pouvoir détecter ou corriger une éventuelle erreur de transmission.
@@ -2105,10 +2150,200 @@ Dans la suite de ce projet, nous nous concentrerons sur l’implémentation num�
 
 \section{Résultats}
 
-Résultats ici.
+Afin de valider concrètement le mécanisme étudié dans la partie théorique, nous
+avons implémenté le code de répétition à trois qubits à l'aide de la
+bibliothèque \texttt{Qiskit} (avec le simulateur \texttt{Aer} pour l'exécution
+et \texttt{matplotlib} pour la visualisation). Le principe de la simulation est
+le suivant : on injecte volontairement une erreur de type bit-flip (porte $X$)
+sur l'un des qubits, puis on vérifie que le circuit de correction restaure bien
+l'état initial. La simulation est effectuée sur un simulateur \emph{idéal} (sans
+bruit aléatoire) afin d'isoler et de tester le seul mécanisme de correction.
+
+\subsection{Implémentation du circuit}
+
+Le circuit utilise cinq qubits : trois qubits de données $q_0, q_1, q_2$\footnote{Conformément
+à la convention de Qiskit, les qubits sont numérotés à partir de $0$ ; ils
+correspondent aux qubits notés $1, 2, 3$ dans la partie théorique. Qiskit
+affiche par ailleurs les chaînes de bits dans l'ordre inverse ($q_2 q_1 q_0$),
+ce qui reste sans incidence ici car les états logiques $000$ et $111$ sont
+symétriques.} portant le qubit logique, et deux qubits auxiliaires (ancillas) $a_0, a_1$ servant à la
+mesure du syndrome. Il se construit en cinq étapes, qui reprennent exactement la
+démarche théorique :
+
+\begin{enumerate}
+    \item \textbf{Préparation} de l'état à protéger sur $q_0$.
+    \item \textbf{Encodage} sur trois qubits par deux portes CNOT
+          ($|0\rangle \to |000\rangle$, $|1\rangle \to |111\rangle$).
+    \item \textbf{Injection d'une erreur} (porte $X$) sur l'un des qubits.
+    \item \textbf{Mesure du syndrome} : deux ancillas récupèrent la parité des
+          qubits voisins, puis sont mesurées (les qubits de données ne sont
+          jamais mesurés).
+    \item \textbf{Correction conditionnelle} : une porte $X$ est appliquée au
+          bon qubit selon la valeur du syndrome.
+\end{enumerate}
+
+Le cœur du circuit (encodage, erreur, syndrome et correction) s'écrit en Qiskit
+de la manière suivante :
+
+\begin{verbatim}
+# Encodage : |1> -> |111> (2 portes CNOT)
+qc.cx(q[0], q[1])
+qc.cx(q[0], q[2])
+
+# Erreur volontaire (bit-flip) sur le qubit du milieu
+qc.x(q[1])
+
+# Mesure du syndrome via 2 ancillas (parite des qubits voisins)
+qc.cx(q[0], a[0]); qc.cx(q[1], a[0])   # a0 = q0 XOR q1
+qc.cx(q[1], a[1]); qc.cx(q[2], a[1])   # a1 = q1 XOR q2
+qc.measure(a[0], syndrome[0])
+qc.measure(a[1], syndrome[1])
+
+# Correction conditionnelle selon le syndrome (= a0 + 2*a1)
+with qc.if_test((syndrome, 1)): qc.x(q[0])   # erreur detectee sur q0
+with qc.if_test((syndrome, 3)): qc.x(q[1])   # erreur detectee sur q1
+with qc.if_test((syndrome, 2)): qc.x(q[2])   # erreur detectee sur q2
+\end{verbatim}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{schema_circuit.png}
+    \caption{Circuit complet généré par Qiskit : préparation, encodage,
+    injection de l'erreur, mesure du syndrome sur les ancillas, puis correction
+    conditionnelle.}
+    \label{fig:circuit-qiskit}
+\end{figure}
+
+\subsection{Protection d'un état de base}
+
+Nous protégeons d'abord le qubit dans l'état $|1\rangle$, encodé en
+$|111\rangle$, et nous injectons l'erreur sur le qubit du milieu ($q_1$). Chaque
+expérience est répétée $1000$ fois. Le tableau~\ref{tab:base} compare les
+résultats sans et avec l'étape de correction.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Configuration} & \textbf{État mesuré} & \textbf{Occurrences} & \textbf{Syndrome} \\
+        \hline
+        Sans correction & $101$ & $1000 / 1000$ & $11$ \\
+        Avec correction & $111$ & $1000 / 1000$ & $11$ \\
+        \hline
+    \end{tabular}
+    \caption{Protection de l'état $|1\rangle$ contre une erreur $X$ sur $q_1$.}
+    \label{tab:base}
+\end{table}
+
+Sans correction, l'erreur survit : le qubit du milieu reste inversé et l'on
+mesure systématiquement $101$. Avec l'étape de correction, on retrouve
+systématiquement $111$, c'est-à-dire l'état logique de départ : \textbf{l'erreur
+a bien été corrigée}. On remarque que le syndrome vaut $11$ dans les deux cas :
+la détection fonctionne indépendamment de la correction, et ce syndrome désigne
+correctement le qubit $q_1$ (conformément à la table~1 de la partie théorique).
+
+\subsection{Protection d'une superposition}
+
+Le résultat précédent est analogue au code classique à trois bits. La véritable
+spécificité quantique apparaît lorsqu'on protège une \emph{superposition} : on
+prépare alors $q_0$ dans l'état $\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)$ à
+l'aide d'une porte de Hadamard, ce qui donne après encodage l'état logique
+$\frac{1}{\sqrt{2}}(|000\rangle + |111\rangle)$. Le
+tableau~\ref{tab:superposition} présente les résultats.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Configuration} & \textbf{État mesuré} & \textbf{Occurrences} & \textbf{Syndrome} \\
+        \hline
+        Sans correction & $010$ & $\approx 500 / 1000$ & $11$ \\
+        Sans correction & $101$ & $\approx 500 / 1000$ & $11$ \\
+        \hline
+        Avec correction & $000$ & $\approx 500 / 1000$ & $11$ \\
+        Avec correction & $111$ & $\approx 500 / 1000$ & $11$ \\
+        \hline
+    \end{tabular}
+    \caption{Protection de la superposition
+    $\frac{1}{\sqrt{2}}(|000\rangle + |111\rangle)$ contre une erreur $X$ sur
+    $q_1$. Les proportions sont d'environ $50\,\%$, aux fluctuations statistiques
+    près.}
+    \label{tab:superposition}
+\end{table}
+
+Sans correction, on n'obtient que des états \emph{invalides} ($010$ et $101$) :
+la superposition a été déformée. Avec correction, on ne mesure plus que les deux
+états logiques valides $000$ et $111$, dans la même proportion $50/50$ qu'au
+départ. C'est le point essentiel : non seulement l'erreur a été corrigée, mais
+la superposition a été \textbf{préservée}, alors même que nous n'avons jamais
+mesuré directement les qubits de données. C'est exactement ce que le théorème de
+non-clonage rendait impossible par simple copie. L'histogramme de la
+figure~\ref{fig:histogramme} illustre ce contraste.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{histogramme.png}
+    \caption{Histogramme comparatif des états mesurés sans et avec correction.
+    L'étape de correction ramène les mesures sur les seuls états valides.}
+    \label{fig:histogramme}
+\end{figure}
+
+\subsection{Interprétation}
+
+La simulation confirme l'ensemble de la démarche théorique. Le code de
+répétition à trois qubits détecte une erreur de type bit-flip grâce à la mesure
+de syndrome, en localise la position sans révéler l'information protégée, puis la
+corrige, aussi bien pour un état de base que pour une superposition. L'erreur
+ayant été injectée sur le qubit du milieu ($q_1$), le syndrome mesuré vaut $11$ ;
+une erreur sur $q_0$ ou $q_2$ donnerait respectivement les syndromes $01$ et
+$10$, et conduirait à corriger le bon qubit dans chaque cas. Ces résultats sont
+obtenus sur un simulateur idéal avec une unique erreur contrôlée ; le
+comportement attendu dans un cadre réaliste (bruit aléatoire, portes et mesures
+imparfaites) fait l'objet de la conclusion.
 
 \section{Conclusion}
 
-Conclusion ici.
+Ce projet nous a permis de découvrir les fondements du calcul quantique --- les
+qubits, la superposition, les portes et la mesure --- puis d'aborder la
+problématique centrale de la correction d'erreurs. Celle-ci est à la fois rendue
+\emph{nécessaire} par la fragilité des états quantiques et la destruction de
+l'information lors d'une mesure, et rendue \emph{non triviale} par le théorème de
+non-clonage, qui interdit la stratégie classique de simple duplication. Nous
+avons étudié puis implémenté le code de répétition à trois qubits, qui contourne
+cette difficulté en répartissant l'information d'un qubit logique sur trois
+qubits physiques intriqués, et en exploitant une mesure de syndrome capable de
+localiser une erreur sans jamais observer directement l'état logique.
+
+L'implémentation en Qiskit a confirmé le bon fonctionnement du mécanisme : pour
+toute erreur $X$ affectant un unique qubit physique, l'état logique est restauré
+à l'identique, qu'il s'agisse d'un état de base ou d'une superposition, cette
+dernière étant préservée sans avoir été mesurée.
+
+Ce code présente cependant des limites importantes, de plusieurs natures.
+D'abord, il ne protège que contre l'opérateur $X$ : il est totalement aveugle aux
+\textbf{erreurs de phase} ($Z$), qui ne produisent aucun syndrome, et ne corrige
+donc pas non plus les erreurs $Y = iXZ$ qui combinent les deux effets. Ensuite,
+comme le code classique à trois bits, il échoue dès que \textbf{deux qubits ou
+plus} sont affectés simultanément : le diagnostic désigne alors le mauvais qubit,
+et le taux d'erreur résiduel reste de l'ordre de $3p^2$ pour une probabilité
+d'erreur physique $p$ faible --- l'amélioration n'est réelle que tant que $p$
+demeure suffisamment petit. Enfin, notre simulation suppose des portes, des
+ancillas et des mesures parfaites. Dans un dispositif réel, le circuit
+d'extraction du syndrome est lui-même bruité : une porte CNOT défectueuse peut
+\textbf{propager} une erreur d'un qubit vers un autre, et une erreur de mesure
+fausse le syndrome, au point que le circuit de correction peut introduire plus
+d'erreurs qu'il n'en corrige. C'est tout l'enjeu de la \emph{tolérance aux
+fautes}.
+
+Ces limites motivent le recours à des codes plus complets, étudiés dans la
+partie théorique : le code de Shor (neuf qubits), le code de Steane (sept
+qubits), ou les \emph{surface codes} adaptés aux architectures actuelles d'IBM et
+de Google. Tous reposent sur des mesures de syndrome et des qubits auxiliaires,
+mais au prix d'un surcoût considérable en qubits physiques. C'est aujourd'hui le
+principal obstacle pratique : protéger un seul qubit logique fiable exige un
+grand nombre de qubits physiques, ce qui explique pourquoi la correction
+d'erreurs quantique, bien que théoriquement aboutie, reste l'un des plus grands
+défis de la construction d'ordinateurs quantiques fiables.
+
 
 \end{document}
