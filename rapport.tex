@@ -1005,154 +1005,106 @@ Ainsi, un algorithme classique nécessite deux évaluations de la fonction dans 
 
 \subsubsection{Approche quantique : algorithme de Deutsch}
 
-L’algorithme de Deutsch constitue l’un des premiers algorithmes quantiques démontrant un avantage théorique sur les méthodes classiques.
+L’algorithme de Deutsch est le premier exemple historique démontrant qu'un ordinateur quantique peut surpasser un ordinateur classique. Son but est de deviner une propriété globale d'une fonction inconnue $f$ (savoir si elle est constante ou équilibrée) en interrogeant une "boîte noire" (l'oracle) (une seule fois au lieu de deux).
 
-Le principe consiste à utiliser un \textit{oracle quantique} $U_f$ capable d’encoder la fonction $f$ selon la transformation suivante :
+Pour réussir ce tour de force, l'algorithme n'utilise pas des valeurs fixes ($0$ ou $1$), mais il exploite les vagues d'interférences de la mécanique quantique. On peut décomposer son fonctionnement en cinq étapes simples et intuitives :
 
+\medskip
+\textbf{Étape 1 — L'initialisation} \\
+On prépare deux qubits. Le premier (en haut) servira à poser la question, il est configuré à $|0\rangle$. Le second (en bas) servira de cible pour stocker la réponse, il est configuré à $|1\rangle$ :
 \[
-U_f
-:
-|x\rangle|y\rangle
-\mapsto
-|x\rangle
-|y \oplus f(x)\rangle
+|\psi_0\rangle = |0\rangle|1\rangle
 \]
 
-où $\oplus$ désigne l’opération XOR (addition modulo 2).
-
-L’algorithme se déroule selon les étapes suivantes :
-
-\begin{enumerate}
-    \item Préparer les deux qubits dans l’état initial :
-    
-    \[
-    |0\rangle|1\rangle
-    \]
-
-    \item Appliquer une porte de Hadamard sur chacun des qubits ;
-
-    \item Appliquer l’oracle quantique $U_f$ ;
-
-    \item Appliquer une nouvelle porte de Hadamard sur le premier qubit ;
-
-    \item Mesurer le premier qubit.
-\end{enumerate}
-
-Le résultat de la mesure permet directement de conclure :
-
+\medskip
+\textbf{Étape 2 — La mise en superposition (On pose toutes les questions en même temps)} \\
+On applique une porte de Hadamard ($H$) sur les deux qubits. 
 \begin{itemize}
-    \item si le résultat mesuré est $0$, alors la fonction est constante ;
-    \item si le résultat mesuré est $1$, alors la fonction est équilibrée.
+    \item Le qubit du haut se sépare en deux : il devient une superposition équilibrée contenant à la fois $0$ et $1$ ($\frac{|0\rangle+|1\rangle}{\sqrt{2}}$). On va donc interroger la boîte noire pour toutes les entrées possibles en un seul instant.
+    \item Le qubit du bas passe dans un état de phase inversée, noté $|-\rangle = \frac{|0\rangle-|1\rangle}{\sqrt{2}}$. C'est lui qui va servir de "piège" pour la suite.
 \end{itemize}
 
-Contrairement à l’approche classique, une seule interrogation de l’oracle est nécessaire.
+\medskip
+\textbf{Étape 3 — L'effet "Phase Kickback" (Le cœur de l'astuce)} \\
+On envoie nos qubits dans l'oracle $U_f$. En informatique classique, une fonction modifie le bit de sortie. Ici, grâce aux propriétés mathématiques du qubit du bas ($|-\rangle$), le qubit du bas **ne change pas de valeur**. 
+
+En revanche, un phénomène magique se produit : la réponse de la fonction ($f(0)$ et $f(1)$) est "propulsée" en arrière et vient modifier directement le signe ($+$ ou $-$) devant les états du qubit du haut. L'état du qubit du haut devient alors :
+\[
+|\text{Qubit du haut}\rangle = \frac{(-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle}{\sqrt{2}}
+\]
+L'information locale est maintenant encodée sous forme de phase (de signe) sur notre premier qubit.
+
+\medskip
+\textbf{Étape 4 — Le tri par interférences} \\
+On applique une seconde porte de Hadamard ($H$) uniquement sur le qubit du haut pour décoder ces signes. C'est ici que l'avantage quantique se matérialise sous forme d'interférences comme des ondes à la surface de l'eau :
+\begin{itemize}
+    \item \textbf{Si la fonction est constante} ($f(0) = f(1)$) : Les deux états ont le même signe. Ils s'additionnent (interférence constructive). Le qubit du haut est forcé de revenir s'effondrer sur l'état d'origine : \textbf{$|0\rangle$}.
+    \item \textbf{Si la fonction est équilibrée} ($f(0) \neq f(1)$) : Les deux états ont des signes opposés. Ils se détruisent (interférence destructive). Le qubit du haut est propulsé sur l'état opposé : \textbf{$|1\rangle$}.
+\end{itemize}
+
+\medskip
+\textbf{Étape 5 — La lecture du diagnostic} \\
+Il ne reste plus qu'à mesurer le qubit du haut. Le résultat est totalement mathématique et déterministe :
+\begin{itemize}
+    \item Si on mesure \textbf{0} : la fonction est constante.
+    \item Si on mesure \textbf{1} : la fonction est équilibrée.
+\end{itemize}
+
+Grâce à la superposition et au retour de phase, une seule interaction avec l'oracle a suffi pour extraire la parité globale de la fonction, là où la physique classique exigeait deux essais distincts.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}
 
 % =====================================================
-% LIGNES DES QUBITS
+% LIGNES DES QUBITS (FILS)
 % =====================================================
-
-% Premier qubit
+% Ligne 1 (Haut)
 \node[left] at (0,1.5) {$\ket{0}$};
-\draw (0,1.5) -- (0.6,1.5);
-\draw (1.3,1.5) -- (2.2,1.5);
-\draw (3.4,1.5) -- (4.2,1.5);
-\draw (4.9,1.5) -- (5.7,1.5);
+\draw (0,1.5) -- (0.6,1.5); % Entrée -> H
+\draw (1.3,1.5) -- (2.2,1.5); % H -> U_f
+\draw (3.4,1.5) -- (4.2,1.5); % U_f -> H
+\draw (4.9,1.5) -- (5.7,1.5); % H -> Mesure
 
-% Ligne classique après mesure
-\draw[double, distance=2pt] (6.4,1.5) -- (8.8,1.5);
+% Ligne classique double après la mesure
+\draw[double, distance=2pt] (6.4,1.5) -- (7.5,1.5);
 
-\node[right] at (8.8,1.8)
-{\small $0$ : fonction constante};
-
-\node[right] at (8.8,1.2)
-{\small $1$ : fonction équilibrée};
-
-% Deuxième qubit
+% Ligne 2 (Bas)
 \node[left] at (0,0) {$\ket{1}$};
-\draw (0,0) -- (0.6,0);
-\draw (1.3,0) -- (2.2,0);
-\draw (3.4,0) -- (8.0,0);
+\draw (0,0) -- (0.6,0);   % Entrée -> H
+\draw (1.3,0) -- (2.2,0);   % H -> U_f
+\draw (3.4,0) -- (7.5,0);   % U_f -> Sortie vaine
+
 
 % =====================================================
-% PORTES QUANTIQUES
+% PORTES LOGIQUES
 % =====================================================
-
-% Hadamard initial qubit 1
-\draw (0.6,1.15) rectangle (1.3,1.85);
+% Première couche : Portes Hadamard (H)
+\draw[fill=white] (0.6,1.15) rectangle (1.3,1.85);
 \node at (0.95,1.5) {$H$};
 
-% Hadamard initial qubit 2
-\draw (0.6,-0.35) rectangle (1.3,0.35);
+\draw[fill=white] (0.6,-0.35) rectangle (1.3,0.35);
 \node at (0.95,0) {$H$};
 
-% Oracle Uf
-\draw[line width=0.8pt] (2.2,-0.6) rectangle (3.4,2.1);
-\node at (2.8,0.75) {\Large $U_f$};
+% Deuxième couche : L'Oracle U_f (Boîte qui prend les deux lignes)
+\draw[fill=white] (2.2,-0.5) rectangle (3.4,2.0);
+\node at (2.8,0.75) {$U_f$};
 
-% Deuxième Hadamard
-\draw (4.2,1.15) rectangle (4.9,1.85);
+% Troisième couche : Deuxième porte Hadamard (uniquement en haut)
+\draw[fill=white] (4.2,1.15) rectangle (4.9,1.85);
 \node at (4.55,1.5) {$H$};
 
-% =====================================================
-% MESURE
-% =====================================================
-
-% Bloc mesure
-\draw (5.7,1.15) rectangle (6.4,1.85);
-
-% Arc du symbole de mesure
-\draw (5.88,1.3) arc (180:0:0.23);
-
-% Aiguille
-\draw[->, >=stealth]
-(6.05,1.3)
---
-(6.28,1.72);
 
 % =====================================================
-% ETATS INTERMEDIAIRES
+% BLOC DE MESURE PROPRE (SANS CONFLIT DE TEXTE)
 % =====================================================
-
-\draw[dashed, gray]
-(0.3,-0.9)
---
-(0.3,2.4)
-node[above]
-{\small $\ket{\psi_0}$};
-
-\draw[dashed, gray]
-(1.75,-0.9)
---
-(1.75,2.4)
-node[above]
-{\small $\ket{\psi_1}$};
-
-\draw[dashed, gray]
-(3.8,-0.9)
---
-(3.8,2.4)
-node[above]
-{\small $\ket{\psi_2}$};
-
-\draw[dashed, gray]
-(5.3,-0.9)
---
-(5.3,2.4)
-node[above]
-{\small $\ket{\psi_3}$};
+\draw[fill=white] (5.7,1.15) rectangle (6.4,1.85);
+\draw (5.85,1.3) arc (160:20:0.28); % Le cadran de l'appareil
+\draw[->, >=stealth] (6.05,1.25) -- (6.35,1.75); % L'aiguille indicatrice
 
 \end{tikzpicture}
-
-\caption{
-Circuit quantique de l’algorithme de Deutsch.
-}
-
-\label{fig:circuit_deutsch}
-
+\caption{Circuit quantique de l’algorithme de Deutsch.}
+\label{fig:circuit_deutsch_parfait}
 \end{figure}
 
 \subsubsection{Comparaison entre approche classique et quantique}
