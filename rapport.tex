@@ -1625,35 +1625,48 @@ Il est important de remarquer que les amplitudes $\alpha$ et $\beta$ n’ont pas
 \centering
 \begin{tikzpicture}
 
-% Lignes des qubits
-\draw (0,2) -- (6,2);
+% Étape temporelle (Entrée)
+\draw[dashed, gray] (0.5,-0.5) -- (0.5,2.5) node[above] {\small $\ket{\Psi_0}$};
+
+% Ligne du Qubit 1 (Contrôle des deux CNOT)
 \node[left] at (0,2) {$\ket{\psi}$};
+\draw (0,2) -- (4,2);
+\node[right] at (4,2) {\small $\alpha\ket{000} + \beta\ket{111}$};
 
-\draw (0,1) -- (6,1);
+% Ligne du Qubit 2
 \node[left] at (0,1) {$\ket{0}$};
+\draw (0,1) -- (4,1);
 
-\draw (0,0) -- (6,0);
+% Ligne du Qubit 3
 \node[left] at (0,0) {$\ket{0}$};
+\draw (0,0) -- (4,0);
 
-% Première CNOT
-\filldraw (2,2) circle (2pt);
-\draw (2,2) -- (2,1);
+% Première porte CNOT (Qubit 1 -> Qubit 2)
+\filldraw (1.5,2) circle (2pt);
+\draw (1.5,2) -- (1.5,1);
+\draw (1.5,1) circle (0.15);
+\draw (1.35,1) -- (1.65,1);
+\draw (1.5,0.85) -- (1.5,1.15);
 
-\draw (2,1) circle (0.18);
-\draw (1.82,1) -- (2.18,1);
-\draw (2,0.82) -- (2,1.18);
+% Étape temporelle (Milieu)
+\draw[dashed, gray] (2.2,-0.5) -- (2.2,2.5) node[above] {\small $\ket{\Psi_1}$};
 
-% Deuxième CNOT
-\filldraw (4,2) circle (2pt);
-\draw (4,2) -- (4,0);
+% Deuxième porte CNOT (Qubit 1 -> Qubit 3)
+\filldraw (3.0,2) circle (2pt);
+\draw (3.0,2) -- (3.0,0);
+\draw (3.0,0) circle (0.15);
+\draw (2.85,0) -- (3.15,0);
+\draw (3.0,-0.15) -- (3.0,0.15);
 
-\draw (4,0) circle (0.18);
-\draw (3.82,0) -- (4.18,0);
-\draw (4,-0.18) -- (4,0.18);
+% Étape temporelle (Sortie)
+\draw[dashed, gray] (3.6,-0.5) -- (3.6,2.5) node[above] {\small $\ket{\psi_L}$};
+
+% Accolade de regroupement de sortie
+\node[right] at (4.0, 1) {$\left. \vphantom{\begin{array}{c}1\\2\\3\end{array}} \right\} \quad \ket{\psi_L}$};
 
 \end{tikzpicture}
-\caption{Encodage du qubit logique dans le code correcteur à trois qubits.}
-\label{fig:encoding}
+\caption{Circuit d'encodage du code correcteur quantique à trois qubits.}
+\label{fig:encodage_bitflip}
 \end{figure}
 
 \subsubsection{Modélisation d’une erreur de type X}
@@ -1697,6 +1710,36 @@ X_3\ket{\psi_L}
 \]
 
 Le défi consiste alors à identifier quel qubit a été affecté, tout en évitant de mesurer directement l’état quantique, ce qui détruirait la superposition.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% Entrée de l'état logique encodé
+\node[left] at (-0.2, 1) {$\ket{\psi_{L}} = \alpha\ket{000}+\beta\ket{111} \quad \left\{ \vphantom{\begin{array}{c}1\\2\\3\end{array}} \right.$};
+
+% Lignes des qubits physiques
+\node[left] at (0,2) {$q_0$};
+\draw (0,2) -- (5,2);
+
+\node[left] at (0,1) {$q_1$};
+\draw (0,1) -- (5,1);
+
+\node[left] at (0,0) {$q_2$};
+\draw (0,0) -- (5,0);
+
+% Insertion de l'erreur X (Bruit parasite) sur q0
+\draw (2,1.7) rectangle (2.7,2.3);
+\node at (2.35,2) {$X$};
+
+% État altéré en sortie
+\node[right] at (5.2, 1) {$\left. \vphantom{\begin{array}{c}1\\2\\3\end{array}} \right\} \quad \ket{\Psi_{bruit}} = \alpha\ket{100}+\beta\ket{011}$};
+
+\end{tikzpicture}
+\caption{Propagation d'une erreur de type bit-flip sur le premier qubit physique $q_0$.}
+\label{fig:erreur_x_q0}
+\end{figure}
+
 
 \subsubsection{Détection de l’erreur : syndrome quantique}
 
@@ -1771,6 +1814,73 @@ $X_3$ & $+1$ & $-1$ & $X_3$ \\ \hline
 \end{table}
 
 Cette procédure permet d’obtenir une information sur l’erreur sans mesurer directement le qubit logique.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% ================= LIGNES DES QUBITS =================
+\node[left] at (0,4) {$q_0$}; \draw (0,4) -- (6.5,4);
+\node[left] at (0,3) {$q_1$}; \draw (0,3) -- (6.5,3);
+\node[left] at (0,2) {$q_2$}; \draw (0,2) -- (6.5,2);
+
+% Qubits auxiliaires (ancillas) initialisés à |0⟩
+\node[left] at (0,1) {$a_1$ }; \draw (0,1) -- (5.5,1);
+\node[left] at (0,0) {$a_2$ }; \draw (0,0) -- (5.5,0);
+
+% Lignes doubles (bits classiques) après la mesure
+\draw[double, distance=2pt] (6.2,1) -- (7.5,1);
+\draw[double, distance=2pt] (6.2,0) -- (7.5,0);
+
+\node[right] at (7.5,1) {$S_1$};
+\node[right] at (7.5,0) {$S_2$};
+
+% ================= PREMIER SYNDROME : Z1 Z2 (a1) =================
+% CNOT depuis q0 vers a1
+\filldraw (1.5,4) circle (2pt);
+\draw (1.5,4) -- (1.5,1);
+\draw (1.5,1) circle (0.15);
+\draw (1.35,1) -- (1.65,1); \draw (1.5,0.85) -- (1.5,1.15);
+
+% CNOT depuis q1 vers a1
+\filldraw (2.5,3) circle (2pt);
+\draw (2.5,3) -- (2.5,1);
+\draw (2.5,1) circle (0.15);
+\draw (2.35,1) -- (2.65,1); \draw (2.5,0.85) -- (2.5,1.15);
+
+
+% ================= SECOND SYNDROME : Z2 Z3 (a2) =================
+% CNOT depuis q1 vers a2
+\filldraw (4.0,3) circle (2pt);
+\draw (4.0,3) -- (4.0,0);
+\draw (4.0,0) circle (0.15);
+\draw (3.85,0) -- (4.15,0); \draw (4.0,-0.15) -- (4.0,0.15);
+
+% CNOT depuis q2 vers a2
+\filldraw (5.0,2) circle (2pt);
+\draw (5.0,2) -- (5.0,0);
+\draw (5.0,0) circle (0.15);
+\draw (4.85,0) -- (5.15,0); \draw (5.0,-0.15) -- (5.0,0.15);
+
+
+% =====================================================
+% BLOCS DE MESURE (CADRAN + AIGUILLE SEULS)
+% =====================================================
+% Boîte de mesure a1
+\draw[fill=white] (5.8,0.65) rectangle (6.5,1.35);
+\draw (5.95,0.8) arc (160:20:0.2); 
+\draw[->, >=stealth] (6.15,0.75) -- (6.4,1.25);
+
+% Boîte de mesure a2
+\draw[fill=white] (5.8,-0.35) rectangle (6.5,0.35);
+\draw (5.95,-0.2) arc (160:20:0.2); 
+\draw[->, >=stealth] (6.15,-0.25) -- (6.4,0.25);
+
+\end{tikzpicture}
+\caption{Circuit de mesure du syndrome permettant d'extraire la parité des qubits sans détruire l'information quantique.}
+\label{fig:mesure_syndrome}
+\end{figure}
+
 
 \subsubsection{Correction de l’erreur}
 
