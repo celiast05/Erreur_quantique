@@ -695,6 +695,7 @@ car le qubit de contrôle est dans l’état $\ket{0}$.
 \caption{Application de la porte CNOT sur l’état $\ket{10}$.}
 \end{figure}
 
+
 \subsection{Mesure quantique}
 
 La mesure constitue un élément fondamental du calcul quantique. Contrairement à l’informatique classique, où l’état d’un bit peut être observé sans perturbation, la mesure d’un qubit modifie irréversiblement son état.
@@ -1075,48 +1076,64 @@ Le produit tensoriel permet ainsi de représenter mathématiquement un système 
 Cependant, cette opération est fondamentalement impossible à cause du \textbf{théorème de non-clonage quantique}.
 
 \begin{theorem}[Théorème de non-clonage]
-Il n’existe aucun opérateur unitaire universel permettant de copier parfaitement un état quantique arbitraire et inconnu.
+Il n'existe pas de porte quantique qui réalise le clonage des 1-qubits, 
+c'est-à-dire telle que pour tout 1-qubit $|\psi\rangle$ on ait :
+\[
+|\psi\rangle \otimes |0\rangle \;\longrightarrow\; |\psi\rangle \otimes |\psi\rangle
+\]
 \end{theorem}
 
-L’idée de la démonstration repose sur une contradiction mathématique. Supposons qu’il existe un opérateur unitaire $U$ capable de cloner deux états quantiques quelconques $\ket{\phi}$ et $\ket{\psi}$ :
-
+\begin{proof}
+Raisonnons par l'absurde et supposons que le clonage quantique soit possible.
+Il existerait alors une matrice unitaire $A \in \mathcal{M}_4(\mathbb{C})$ telle que :
 \[
-U(\ket{\phi}\ket{0})
-=
-\ket{\phi}\ket{\phi}
+A\,|\psi\rangle|0\rangle = |\psi\rangle|\psi\rangle \quad \text{pour tout qubit } |\psi\rangle
 \]
 
+\textbf{Étape 1 — action de $A$ sur les états fondamentaux.}
+
+En appliquant cette hypothèse à $|0\rangle$ puis à $|1\rangle$ :
 \[
-U(\ket{\psi}\ket{0})
-=
-\ket{\psi}\ket{\psi}
+A\,|0\rangle|0\rangle = |0\rangle|0\rangle
+\qquad \text{et} \qquad
+A\,|1\rangle|0\rangle = |1\rangle|1\rangle
 \]
 
-En utilisant la conservation du produit scalaire par les opérateurs unitaires, on obtient :
+\textbf{Étape 2 — test sur une superposition.}
 
+Considérons maintenant le qubit $|\psi_2\rangle = \dfrac{1}{\sqrt{2}}\bigl(|0\rangle + |1\rangle\bigr)$.
+Nous allons calculer $A\,|\psi_2\rangle|0\rangle$ de deux façons différentes.
+
+\medskip
+\textit{Par linéarité de $A$ :}
+\begin{align*}
+A\,|\psi_2\rangle|0\rangle 
+&= A\left(\frac{1}{\sqrt{2}}\bigl(|0\rangle + |1\rangle\bigr)\otimes|0\rangle\right) \\
+&= \frac{1}{\sqrt{2}}\,A\,|0\rangle|0\rangle + \frac{1}{\sqrt{2}}\,A\,|1\rangle|0\rangle \\
+&= \frac{1}{\sqrt{2}}\,|0\rangle|0\rangle + \frac{1}{\sqrt{2}}\,|1\rangle|1\rangle \\
+&= \frac{1}{\sqrt{2}}\bigl(|0\rangle|0\rangle + |1\rangle|1\rangle\bigr)
+\end{align*}
+
+\textit{Par hypothèse de clonage :}
+\begin{align*}
+A\,|\psi_2\rangle|0\rangle 
+&= |\psi_2\rangle \otimes |\psi_2\rangle \\
+&= \frac{1}{\sqrt{2}}\bigl(|0\rangle+|1\rangle\bigr) \otimes \frac{1}{\sqrt{2}}\bigl(|0\rangle+|1\rangle\bigr) \\
+&= \frac{1}{2}\bigl(|0\rangle|0\rangle + |0\rangle|1\rangle + |1\rangle|0\rangle + |1\rangle|1\rangle\bigr)
+\end{align*}
+
+\textbf{Étape 3 — contradiction.}
+
+Les deux expressions sont différentes :
 \[
-\braket{\phi|\psi}
-=
-(\braket{\phi|\psi})^2
+\frac{1}{\sqrt{2}}\bigl(|0\rangle|0\rangle + |1\rangle|1\rangle\bigr)
+\;\neq\;
+\frac{1}{2}\bigl(|0\rangle|0\rangle + |0\rangle|1\rangle + |1\rangle|0\rangle + |1\rangle|1\rangle\bigr)
 \]
 
-Cette relation implique uniquement deux possibilités :
-
-\[
-\braket{\phi|\psi}=0
-\]
-
-ou
-
-\[
-\braket{\phi|\psi}=1
-\]
-
-Autrement dit, le clonage parfait n’est possible que pour des états orthogonaux ou identiques. Il est donc impossible de copier un état quantique arbitraire, en particulier une superposition inconnue.
-
-Cette contrainte rend inapplicables les méthodes classiques de redondance basées sur la copie directe des données.
-
-La correction d’erreurs quantiques doit alors adopter une stratégie différente : au lieu de copier l’information quantique, celle-ci est répartie de manière non locale entre plusieurs qubits grâce au phénomène d’intrication. Cette approche permet de détecter certaines erreurs sans mesurer directement le qubit logique et donc sans détruire l’information quantique.
+car le terme de gauche ne contient pas les états $|0\rangle|1\rangle$ et $|1\rangle|0\rangle$.
+Ceci contredit notre hypothèse. Une telle porte $A$ ne peut donc pas exister.
+\end{proof}
 
 \subsection{Correction d'erreur quantique avec erreur X}
 
@@ -1296,6 +1313,41 @@ Après ces opérations, l’état devient :
 \]
 
 Il est important de remarquer que les amplitudes $\alpha$ et $\beta$ n’ont pas été copiées : elles décrivent désormais un état quantique global intriqué.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+
+% Lignes des qubits
+\draw (0,2) -- (6,2);
+\node[left] at (0,2) {$\ket{\psi}$};
+
+\draw (0,1) -- (6,1);
+\node[left] at (0,1) {$\ket{0}$};
+
+\draw (0,0) -- (6,0);
+\node[left] at (0,0) {$\ket{0}$};
+
+% Première CNOT
+\filldraw (2,2) circle (2pt);
+\draw (2,2) -- (2,1);
+
+\draw (2,1) circle (0.18);
+\draw (1.82,1) -- (2.18,1);
+\draw (2,0.82) -- (2,1.18);
+
+% Deuxième CNOT
+\filldraw (4,2) circle (2pt);
+\draw (4,2) -- (4,0);
+
+\draw (4,0) circle (0.18);
+\draw (3.82,0) -- (4.18,0);
+\draw (4,-0.18) -- (4,0.18);
+
+\end{tikzpicture}
+\caption{Encodage du qubit logique dans le code correcteur à trois qubits.}
+\label{fig:encoding}
+\end{figure}
 
 \subsubsection{Modélisation d’une erreur de type X}
 
