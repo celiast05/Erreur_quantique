@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 #  REGLAGES (on peut les modifier facilement)
 # =====================================================================
 
-# Etat du qubit a proteger : "zero" -> |0> , "un" -> |1> , "superposition"
+# Etat du qubit a proteger : "zero" -> |0> , "un" -> |1> , "superposition" -> (|0> + |1>)/racine(2)
 ETAT_INITIAL = "superposition"
 
 # Sur quel qubit (0, 1 ou 2) on injecte l'erreur. 1 = celui du milieu.
@@ -50,8 +50,8 @@ def construire_circuit(avec_correction):
     Si avec_correction = False, on saute l'etape 4 (pour montrer l'erreur)."""
 
     # 3 qubits "de donnees" (le qubit logique) + 2 qubits "ancillas" (pour le syndrome)
-    q = QuantumRegister(3, "q")          # q[0], q[1], q[2] : les donnees
-    a = QuantumRegister(2, "a")          # a[0], a[1]       : les ancillas
+    q = QuantumRegister(3, "q")          # q[0], q[1], q[2] : les 3 qubits de donnees
+    a = QuantumRegister(2, "a")          # a[0], a[1]       : les 2 qubits auxiliaires (ancillas)
     syndrome = ClassicalRegister(2, "syndrome")   # ou l'on note le syndrome
     sortie = ClassicalRegister(3, "sortie")       # ou l'on note la mesure finale
     qc = QuantumCircuit(q, a, syndrome, sortie)
@@ -69,7 +69,7 @@ def construire_circuit(avec_correction):
     #   |0> devient |000>   et   |1> devient |111>
     qc.cx(q[0], q[1])                     # CNOT : q[0] controle q[1]
     qc.cx(q[0], q[2])                     # CNOT : q[0] controle q[2]
-    qc.barrier(label="encodage")
+    qc.barrier(label="encodage")        # on met une barriere pour mieux visualiser les etapes
 
     # ----- ETAPE 3 : injecter une erreur (porte X) -----
     qc.x(q[QUBIT_ERRONE])                 # une erreur inverse ce qubit
@@ -79,12 +79,12 @@ def construire_circuit(avec_correction):
     # On compare les qubits 2 a 2 SANS regarder leur valeur, grace aux ancillas.
     #   a[0] retient si q[0] et q[1] sont differents
     #   a[1] retient si q[1] et q[2] sont differents
-    qc.cx(q[0], a[0])
-    qc.cx(q[1], a[0])
-    qc.cx(q[1], a[1])
+    qc.cx(q[0], a[0]) # on compare q[0] et q[1] : a[0] = 1 si ils sont differents, 0 sinon
+    qc.cx(q[1], a[0]) 
+    qc.cx(q[1], a[1]) # on compare q[1] et q[2] : a[1] = 1 si ils sont differents, 0 sinon
     qc.cx(q[2], a[1])
-    qc.measure(a[0], syndrome[0])        # on ne mesure QUE les ancillas
-    qc.measure(a[1], syndrome[1])
+    qc.measure(a[0], syndrome[0])        # on ne mesure QUE les ancillas pour connaitre le syndrome, pas les qubits de donnees
+    qc.measure(a[1], syndrome[1])        # le syndrome est un nombre de 0 a 3 qui indique ou se trouve l'erreur
     qc.barrier(label="syndrome")
 
     # ----- ETAPE 4b : corriger selon le syndrome -----
@@ -117,17 +117,16 @@ def simuler(qc):
     simulateur = AerSimulator()
     circuit_pret = transpile(qc, simulateur)
     resultat = simulateur.run(circuit_pret, shots=NB_REPETITIONS).result()
-    return resultat.get_counts()
+    return resultat.get_counts() # nombre de fois ou chaque sortie a ete obtenue
 
 
 def afficher(titre, comptes):
     """Affiche les resultats. Chaque cle a la forme 'sortie syndrome', ex : '111 11'."""
     print(f"\n{titre}")
     for cle, n in sorted(comptes.items(), key=lambda x: x[1], reverse=True):
-        donnees, syn = cle.split(" ")
+        donnees, syn = cle.split(" ") # on separe les 3 bits de donnees (sortie) et les 2 bits du syndrome
         print(f"   qubit mesure = {donnees}   (syndrome = {syn})   "
-              f"obtenu {n} fois sur {NB_REPETITIONS}")
-
+              f"obtenu {n} fois sur {NB_REPETITIONS}") # tri du plus frequent au moins frequent
 
 # =====================================================================
 #  PROGRAMME PRINCIPAL
