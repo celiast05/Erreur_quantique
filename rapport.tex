@@ -1005,7 +1005,7 @@ Ainsi, un algorithme classique nécessite deux évaluations de la fonction dans 
 
 \subsubsection{Approche quantique : algorithme de Deutsch}
 
-L’algorithme de Deutsch est le premier exemple historique démontrant qu'un ordinateur quantique peut surpasser un ordinateur classique. Son but est de deviner une propriété globale d'une fonction inconnue $f$ (savoir si elle est constante ou équilibrée) en interrogeant une "boîte noire" (l'oracle) (une seule fois au lieu de deux).
+L’algorithme de Deutsch est le premier exemple historique démontrant qu'un ordinateur quantique peut surpasser un ordinateur classique. Son but est de deviner une propriété globale d'une fonction inconnue $f$ (savoir si elle est constante ou équilibrée) en interrogeant une "boîte noire" (l'oracle) une seule fois au lieu de deux.
 
 Pour réussir ce tour de force, l'algorithme n'utilise pas des valeurs fixes ($0$ ou $1$), mais il exploite les vagues d'interférences de la mécanique quantique. On peut décomposer son fonctionnement en cinq étapes simples et intuitives :
 
@@ -1026,7 +1026,7 @@ On applique une porte de Hadamard ($H$) sur les deux qubits.
 
 \medskip
 \textbf{Étape 3 — L'effet "Phase Kickback" (Le cœur de l'astuce)} \\
-On envoie nos qubits dans l'oracle $U_f$. En informatique classique, une fonction modifie le bit de sortie. Ici, grâce aux propriétés mathématiques du qubit du bas ($|-\rangle$), le qubit du bas **ne change pas de valeur**. 
+On envoie nos qubits dans l'oracle $U_f$. En informatique classique, une fonction modifie le bit de sortie. Ici, grâce aux propriétés mathématiques du qubit du bas ($|-\rangle$), le qubit du bas ne change pas de valeur. 
 
 En revanche, un phénomène magique se produit : la réponse de la fonction ($f(0)$ et $f(1)$) est "propulsée" en arrière et vient modifier directement le signe ($+$ ou $-$) devant les états du qubit du haut. L'état du qubit du haut devient alors :
 \[
